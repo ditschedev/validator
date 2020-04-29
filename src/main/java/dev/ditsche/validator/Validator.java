@@ -18,7 +18,7 @@ import java.util.List;
  * Validates an object against a
  * defined schema.
  *
- * @param <T>
+ * @param <T> The type of the validated object.
  */
 public class Validator<T> {
 
@@ -100,7 +100,7 @@ public class Validator<T> {
      * returns an error bag.
      *
      * @param object The object that need to be validated.
-     * @throws ValidationException
+     * @throws ValidationException Thrown when at least one rule fails.
      */
     public void validate(T object) throws ValidationException {
         errorBag.clear();
@@ -122,7 +122,10 @@ public class Validator<T> {
             throw new ValidationException(errorBag);
     }
 
-    public static Object getValue(Field field, Object object) {
+    /**
+     * Uses reflection to get the value of the given field.
+     */
+    private static Object getValue(Field field, Object object) {
         for (Method method : object.getClass().getMethods()) {
             if ((method.getName().startsWith("get")) && (method.getName().length() == (field.getName().length() + 3)) ||
                     (method.getName().startsWith("is")) && (method.getName().length() == (field.getName().length() + 2))) {
