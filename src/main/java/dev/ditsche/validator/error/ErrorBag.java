@@ -7,14 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The error bag holds the fields for which
- * at least one rule has not passed.
+ * The error bag holds the fields for which at least one rule has not passed.
  */
 public class ErrorBag {
 
     /**
-     * Holds information about the errors
-     * for each field.
+     * Holds information about the errors for each field.
      */
     @Getter
     HashMap<String, List<String>> errors;

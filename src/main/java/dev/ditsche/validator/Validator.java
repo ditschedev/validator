@@ -15,8 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Validates an object against a
- * defined schema.
+ * Validates an object against a defined schema.
  *
  * @param <T> The type of the validated object.
  */
@@ -34,8 +33,7 @@ public class Validator<T> {
     private List<ValidationField> fields;
 
     /**
-     * Parses a pattern and creates a
-     * Rule instance dynamically if it
+     * Parses a pattern and creates a Rule instance dynamically if it
      * is registered inside the RuleMap.
      */
     private RuleParser ruleParser;
@@ -51,6 +49,12 @@ public class Validator<T> {
 
     /**
      * Adds a field to the schema.
+     * You can add any amount of rules for a field.
+     * <p>
+     * When a field is already existing the rules will be added to the fields rules.
+     * Already existing rules will be overwritten.
+     * <p>
+     * The given fields need to have a getter method starting with {@code get} or {@code is}.
      *
      * @param field The name of the field.
      * @param rules The assigned rules.
@@ -72,12 +76,11 @@ public class Validator<T> {
     }
 
     /**
-     * Adds a field and rules based on a string
-     * representation. Divide rule using a
-     * {@code |} symbol. Parameters can be passed
-     * using a {@code :} syntax.
-     * Sample: required|max:50|length:10:50
-     *
+     * Adds a field and rules based on a string representation. Divide rule using a
+     * {@code |} symbol. Parameters can be passed using a {@code :} syntax.
+     * E.g: "required|max:50|length:10:50"
+     * <p>
+     * The given fields need to have a getter method starting with {@code get} or {@code is}.
      *
      * @param field The name of the field.
      * @param rulesString he assigned rules in string representation.
@@ -96,13 +99,13 @@ public class Validator<T> {
     }
 
     /**
-     * Validates an object against a schema and
-     * returns an error bag.
+     * Validates an object against a schema and returns an error bag.
      *
      * @param object The object that need to be validated.
      * @throws ValidationException Thrown when at least one rule fails.
+     * @throws IllegalAccessException Thrown when the field is not public.
      */
-    public void validate(T object) throws ValidationException {
+    public void validate(T object) throws ValidationException, IllegalAccessException {
         errorBag.clear();
         List<Field> fieldSet = new ArrayList<>();
         for (Class<?> c = object.getClass(); c != null; c = c.getSuperclass())
@@ -123,9 +126,15 @@ public class Validator<T> {
     }
 
     /**
-     * Uses reflection to get the value of the given field.
+     * Uses reflection to invoke a getter of the validation target.
+     * Falls back to the fields default getter. Will fail if the variable
+     * is not publicly accessible.
+     *
+     * @param field The field name whose value should be received.
+     * @param object The validation target object.
+     * @return {@code null} if the field cannot be resolved, or the value.
      */
-    private static Object getValue(Field field, Object object) {
+    private Object getValue(Field field, Object object) throws IllegalAccessException {
         for (Method method : object.getClass().getMethods()) {
             if ((method.getName().startsWith("get")) && (method.getName().length() == (field.getName().length() + 3)) ||
                     (method.getName().startsWith("is")) && (method.getName().length() == (field.getName().length() + 2))) {
@@ -139,12 +148,11 @@ public class Validator<T> {
                 }
             }
         }
-        return null;
+        return field.get(object);
     }
 
     /**
-     * Registers a custom rule with an
-     * abbreviation.
+     * Registers a custom rule with an abbreviation.
      *
      * @param ruleKey The abbreviation for the custom rule.
      * @param ruleClass The custom rule class.

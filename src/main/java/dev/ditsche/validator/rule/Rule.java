@@ -2,6 +2,7 @@ package dev.ditsche.validator.rule;
 
 /**
  * Describes a passable rule for the validator.
+ * Optional parameters can be passed using the constructor.
  */
 public interface Rule {
 

@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Parses a string representation of a rule
- * into a rule object using the {@link RuleInfo}.
- *
- * Parameters for the rules can be separated using
- * a {@code :}.
+ * Parses a string representation of a rule into a rule object using the {@link RuleInfo}.
+ * <p>
+ * Parameters for the rules can be separated using a {@code :}.
+ * Multiple rules are separated by a {@code |}.
  */
 public class RuleParser {
 
@@ -53,10 +52,23 @@ public class RuleParser {
         return Optional.empty();
     }
 
+    /**
+     * Registers a new rule to the rule map.
+     *
+     * @param ruleKey The name of the rule.
+     * @param ruleInfo The rule infos.
+     */
     public void register(String ruleKey, RuleInfo ruleInfo) {
         this.ruleMap.add(ruleKey, ruleInfo);
     }
 
+    /**
+     * Converts a string to a defined type.
+     *
+     * @param targetType The target type.
+     * @param text The string that gets converted.
+     * @return Returns the converted object.
+     */
     private Object convert(Class<?> targetType, String text) {
         PropertyEditor editor = PropertyEditorManager.findEditor(targetType);
         editor.setAsText(text);

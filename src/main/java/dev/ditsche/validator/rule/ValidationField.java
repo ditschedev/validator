@@ -51,12 +51,13 @@ public class ValidationField {
 
     /**
      * Adds a rule to the field.
+     * Replaces the rule if existing.
      *
      * @param rule The applied rule.
      */
     public void addRule(Rule rule) {
-        if(!rules.contains(rule))
-            this.rules.add(rule);
+        this.rules.remove(rule);
+        this.rules.add(rule);
     }
 
 }

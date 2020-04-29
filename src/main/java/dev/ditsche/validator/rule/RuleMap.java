@@ -6,10 +6,8 @@ import java.util.HashMap;
 import java.util.Optional;
 
 /**
- * Handles the mapping of string representations
- * to {@link RuleInfo} objects for parsing.
- * Registers every parsable string representation
- * of all rules.
+ * Handles the mapping of string representations to {@link RuleInfo} objects for parsing.
+ * Registers every parsable string representation of all rules.
  */
 public class RuleMap {
 
