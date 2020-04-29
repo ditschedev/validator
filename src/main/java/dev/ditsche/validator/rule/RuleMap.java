@@ -1,7 +1,6 @@
 package dev.ditsche.validator.rule;
 
-import dev.ditsche.validator.ruleset.MaxRule;
-import dev.ditsche.validator.ruleset.RequiredRule;
+import dev.ditsche.validator.ruleset.*;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -34,6 +33,11 @@ public class RuleMap {
         ruleMap = new HashMap<>();
         add("required", new RuleInfo(RequiredRule.class));
         add("max", new RuleInfo(MaxRule.class, long.class));
+        add("min", new RuleInfo(MinRule.class, long.class));
+        add("alphanum", new RuleInfo(AlphaNumericRule.class));
+        add("email", new RuleInfo(EmailRule.class));
+        add("size", new RuleInfo(SizeRule.class, long.class, long.class));
+        add("pattern", new RuleInfo(PatternRule.class, String.class));
     }
 
     /**
