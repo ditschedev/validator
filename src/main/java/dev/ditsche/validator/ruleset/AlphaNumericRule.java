@@ -15,6 +15,8 @@ public class AlphaNumericRule implements Rule {
 
     @Override
     public boolean passes(Object value) {
+        if(value == null)
+            return false;
         if(!(value instanceof String))
             return false;
         return Pattern.matches(pattern, String.valueOf(value));

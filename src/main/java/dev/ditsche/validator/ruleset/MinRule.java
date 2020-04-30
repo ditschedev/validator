@@ -15,6 +15,8 @@ public class MinRule implements Rule {
 
     @Override
     public boolean passes(Object value) {
+        if(value == null)
+            return false;
         if(value instanceof String)
             return ((String) value).length() >= min;
 

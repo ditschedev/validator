@@ -13,6 +13,8 @@ import javax.mail.internet.InternetAddress;
 public class EmailRule implements Rule {
     @Override
     public boolean passes(Object value) {
+        if(value == null)
+            return false;
 
         if(!(value instanceof String))
             return false;
