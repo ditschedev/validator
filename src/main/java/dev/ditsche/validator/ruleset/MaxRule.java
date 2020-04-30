@@ -16,7 +16,7 @@ public class MaxRule implements Rule {
     @Override
     public boolean passes(Object value) {
         if(value == null)
-            return false;
+            return true;
         if(value instanceof String)
             return ((String) value).length() <= max;
 
