@@ -6,7 +6,7 @@
 
     <groupId>dev.ditsche</groupId>
     <artifactId>validator</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2git</version>
 
     <packaging>jar</packaging>
 
