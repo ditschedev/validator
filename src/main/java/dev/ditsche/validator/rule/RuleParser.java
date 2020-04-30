@@ -36,7 +36,7 @@ public class RuleParser {
         try {
             String[] parts = pattern.split(":");
             Optional<RuleInfo> optionalRuleInfo = ruleMap.lookup(parts[0]);
-            if(!optionalRuleInfo.isPresent())
+            if(optionalRuleInfo.isEmpty())
                 throw new IllegalArgumentException("There is no rule mapped to the pattern: " + pattern);
             RuleInfo ruleInfo = optionalRuleInfo.get();
             List<Object> params = new LinkedList<>();

@@ -90,11 +90,12 @@ public class Validator<T> {
      */
     public Validator<T> addField(String field, String rulesString) {
         String[] rules = rulesString.split("\\|");
-        List<Rule> parsed = new LinkedList<>();
-        for(String rule : rules) {
-            ruleParser.parse(rule).ifPresent(parsed::add);
+        Rule[] parsed = new Rule[rules.length];
+        for(int i = 0; i < rules.length; i++) {
+            int finalI = i;
+            ruleParser.parse(rules[i]).ifPresent(rule -> parsed[finalI] = rule);
         }
-        return addField(field, (Rule[]) parsed.toArray());
+        return addField(field, parsed);
     }
 
     /**
