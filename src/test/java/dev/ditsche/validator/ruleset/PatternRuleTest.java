@@ -2,11 +2,6 @@ package dev.ditsche.validator.ruleset;
 
 import dev.ditsche.validator.TestEntity;
 import dev.ditsche.validator.Validator;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +20,7 @@ public class PatternRuleTest {
     @BeforeEach
     public void setUp() {
         validator = new Validator<>();
-        validator.addField("title", new PatternRule("/^[a-z ,.'-]+$/i"));
+        validator.addField("title", new PatternRule("[a-z ,.'-]*"));
     }
 
     @Test
