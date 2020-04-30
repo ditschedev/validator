@@ -1,15 +1,32 @@
 package dev.ditsche.validator.ruleset;
 
+import dev.ditsche.validator.TestEntity;
+import dev.ditsche.validator.Validator;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class PatternRuleTest {
 
     private final PatternRule patternRule = new PatternRule("\\d*");
+
+    private Validator<TestEntity> validator;
+
+    @BeforeEach
+    public void setUp() {
+        validator = new Validator<>();
+        validator.addField("title", new PatternRule("/^[a-z ,.'-]+$/i"));
+    }
 
     @Test
     public void shouldFailIfNoStringIsProvided() {
@@ -35,6 +52,13 @@ public class PatternRuleTest {
     @Test
     public void shouldReturnValidErrorMessage() {
         assertThat(patternRule.message("test")).isEqualTo("The field \"test\" has an invalid format");
+    }
+
+    @Test
+    public void shouldValidate() {
+        assertDoesNotThrow(() -> {
+            validator.tryValidate(new TestEntity("test"));
+        });
     }
 
 }

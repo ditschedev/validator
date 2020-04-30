@@ -1,5 +1,6 @@
 package dev.ditsche.validator.ruleset;
 
+import dev.ditsche.validator.Validator;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;

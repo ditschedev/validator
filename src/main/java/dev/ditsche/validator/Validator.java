@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -65,6 +66,7 @@ public class Validator<T> {
                 .findFirst().orElse(null);
         if(vf == null) {
             fields.add(new ValidationField(field, rules));
+            return this;
         } else {
             fields.remove(vf);
             for(Rule rule : rules) {
@@ -88,14 +90,11 @@ public class Validator<T> {
      */
     public Validator<T> addField(String field, String rulesString) {
         String[] rules = rulesString.split("\\|");
-        ValidationField vf = fields.stream().filter(f -> f.getField().equals(field))
-                .findFirst().orElse(new ValidationField(field));
-        fields.remove(vf);
+        List<Rule> parsed = new LinkedList<>();
         for(String rule : rules) {
-            ruleParser.parse(rule).ifPresent(vf::addRule);
+            ruleParser.parse(rule).ifPresent(parsed::add);
         }
-        fields.add(vf);
-        return this;
+        return addField(field, (Rule[]) parsed.toArray());
     }
 
     /**
