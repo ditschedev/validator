@@ -100,12 +100,40 @@ public class Validator<T> {
 
     /**
      * Validates an object against a schema and returns an error bag.
+     * @deprecated since 1.0.4
+     * @param object The object that need to be validated.
+     * @throws ValidationException Thrown when at least one rule fails.
+     * @throws IllegalAccessException Thrown when the field is not public.
+     */
+    @Deprecated
+    public void validate(T object) throws ValidationException, IllegalAccessException {
+        errorBag.clear();
+        List<Field> fieldSet = new ArrayList<>();
+        for (Class<?> c = object.getClass(); c != null; c = c.getSuperclass())
+        {
+            Field[] fields = c.getDeclaredFields();
+            fieldSet.addAll(Arrays.asList(fields));
+        }
+        for(ValidationField vf : this.fields) {
+            Field field = fieldSet.stream().filter(f -> f.getName().equals(vf.getField())).findFirst().orElse(null);
+            if(field == null) continue;
+            Object value = getValue(field, object);
+            for(Rule rule : vf.getRules()) {
+                if(!rule.passes(value)) errorBag.add(vf.getField(), rule.message(vf.getField()));
+            }
+        }
+        if(!errorBag.isEmpty())
+            throw new ValidationException(errorBag);
+    }
+
+    /**
+     * Validates an object against a schema and returns an error bag.
      *
      * @param object The object that need to be validated.
      * @throws ValidationException Thrown when at least one rule fails.
      * @throws IllegalAccessException Thrown when the field is not public.
      */
-    public void validate(T object) throws ValidationException, IllegalAccessException {
+    public void tryValidate(T object) throws ValidationException, IllegalAccessException {
         errorBag.clear();
         List<Field> fieldSet = new ArrayList<>();
         for (Class<?> c = object.getClass(); c != null; c = c.getSuperclass())
