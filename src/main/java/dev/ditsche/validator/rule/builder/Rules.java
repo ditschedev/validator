@@ -3,7 +3,7 @@ package dev.ditsche.validator.rule.builder;
 /**
  * @author Tobias Dittmann
  */
-public final class RuleBuilder {
+public final class Rules {
 
     public static StringRuleBuilder string(String field) {
         return new StringRuleBuilder(field);
@@ -17,8 +17,8 @@ public final class RuleBuilder {
         return new ObjectRuleBuilder(field);
     }
 
-    public static ArrayRuleBuilder object(String field) {
+    /*public static ArrayRuleBuilder array(String field) {
         return new ArrayRuleBuilder(field);
-    }
+    }*/
 
 }
