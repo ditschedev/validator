@@ -5,6 +5,7 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The error bag holds the fields for which at least one rule has not passed.
@@ -29,9 +30,13 @@ public class ErrorBag {
      * @param message The error message.
      */
     public void add(String field, String message) {
-        List<String> errorList = errors.getOrDefault(field, new ValidationError(field)).getErrors();
-        errorList.add(message);
-        errors.put(field, new ValidationError(field, errorList));
+        add(new ValidationError(field, List.of(message)));
+    }
+
+    public void add(ValidationError validationError) {
+        List<String> errorList = errors.getOrDefault(validationError.getField(), new ValidationError(validationError.getField())).getErrors();
+        errorList.addAll(validationError.getErrors());
+        errors.put(validationError.getField(), new ValidationError(validationError.getField(), errorList));
     }
 
     /**
@@ -50,6 +55,12 @@ public class ErrorBag {
      */
     public boolean isEmpty() {
         return errors.isEmpty();
+    }
+
+    public void merge(ErrorBag errorBag) {
+        for(ValidationError error: errorBag.getErrors().values()) {
+            add(error);
+        }
     }
 
 }

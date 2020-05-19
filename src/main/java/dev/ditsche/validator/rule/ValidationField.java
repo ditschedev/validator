@@ -1,5 +1,7 @@
 package dev.ditsche.validator.rule;
 
+import dev.ditsche.validator.error.ErrorBag;
+import dev.ditsche.validator.error.ValidationException;
 import lombok.Getter;
 
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.stream.Stream;
  * Describes a validatable field.
  * Holds information about the fields name and the assigned rules.
  */
-public class ValidationField {
+public class ValidationField implements Validatable {
 
     /**
      * The fields name.
@@ -60,4 +62,17 @@ public class ValidationField {
         this.rules.add(rule);
     }
 
+    @Override
+    public ErrorBag validate(Object object, boolean abortEarly) {
+        ErrorBag errorBag = new ErrorBag();
+        for(Rule rule : rules) {
+            boolean passed = rule.passes(object);
+            if(!passed) {
+                errorBag.add(field, rule.message(field));
+                if(abortEarly)
+                    throw new ValidationException(errorBag);
+            }
+        }
+        return errorBag;
+    }
 }

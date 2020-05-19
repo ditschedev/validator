@@ -2,10 +2,7 @@ package dev.ditsche.validator;
 
 import dev.ditsche.validator.error.ErrorBag;
 import dev.ditsche.validator.error.ValidationException;
-import dev.ditsche.validator.rule.Rule;
-import dev.ditsche.validator.rule.RuleInfo;
-import dev.ditsche.validator.rule.RuleParser;
-import dev.ditsche.validator.rule.ValidationField;
+import dev.ditsche.validator.rule.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +28,7 @@ public class Validator<T> {
     /**
      * All registered fields.
      */
-    private List<ValidationField> fields;
+    private List<? extends Validatable> fields;
 
     /**
      * Parses a pattern and creates a Rule instance dynamically if it
@@ -99,14 +96,37 @@ public class Validator<T> {
     }
 
     /**
+     * Adds a field using the ValidationField class.
+     *
+     * @param validationField
+     * @return
+     */
+    public Validator<T> addField(ValidationField validationField) {
+        return addField(validationField.getField(), (Rule[]) validationField.getRules().toArray());
+    }
+
+    /**
+     * Adds a field using the ValidationObject class.
+     *
+     * @param validationField
+     * @return
+     */
+    public Validator<T> addField(ValidationObject validationObject) {
+        return null;
+    }
+
+    public T validate(T object) throws ValidationException, IllegalAccessException {
+        return validate(object, false);
+    }
+
+    /**
      * Validates an object against a schema and returns an error bag.
-     * @deprecated since 1.0.4
+     *
      * @param object The object that need to be validated.
      * @throws ValidationException Thrown when at least one rule fails.
      * @throws IllegalAccessException Thrown when the field is not public.
      */
-    @Deprecated
-    public void validate(T object) throws ValidationException, IllegalAccessException {
+    public T validate(T object, boolean abortEarly) throws ValidationException, IllegalAccessException {
         errorBag.clear();
         List<Field> fieldSet = new ArrayList<>();
         for (Class<?> c = object.getClass(); c != null; c = c.getSuperclass())
@@ -114,16 +134,16 @@ public class Validator<T> {
             Field[] fields = c.getDeclaredFields();
             fieldSet.addAll(Arrays.asList(fields));
         }
-        for(ValidationField vf : this.fields) {
-            Field field = fieldSet.stream().filter(f -> f.getName().equals(vf.getField())).findFirst().orElse(null);
+        for(Validatable validatable : this.fields) {
+            Field field = fieldSet.stream().filter(f -> f.getName().equals(validatable.getField())).findFirst().orElse(null);
             if(field == null) continue;
             Object value = getValue(field, object);
-            for(Rule rule : vf.getRules()) {
-                if(!rule.passes(value)) errorBag.add(vf.getField(), rule.message(vf.getField()));
-            }
+            errorBag.merge(validatable.validate(value, abortEarly));
         }
         if(!errorBag.isEmpty())
             throw new ValidationException(errorBag);
+
+        return object;
     }
 
     /**
@@ -141,13 +161,11 @@ public class Validator<T> {
             Field[] fields = c.getDeclaredFields();
             fieldSet.addAll(Arrays.asList(fields));
         }
-        for(ValidationField vf : this.fields) {
-            Field field = fieldSet.stream().filter(f -> f.getName().equals(vf.getField())).findFirst().orElse(null);
+        for(Validatable validatable : this.fields) {
+            Field field = fieldSet.stream().filter(f -> f.getName().equals(validatable.getField())).findFirst().orElse(null);
             if(field == null) continue;
             Object value = getValue(field, object);
-            for(Rule rule : vf.getRules()) {
-                if(!rule.passes(value)) errorBag.add(vf.getField(), rule.message(vf.getField()));
-            }
+            errorBag.merge(validatable.validate(value, abortEarly));
         }
         if(!errorBag.isEmpty())
             throw new ValidationException(errorBag);

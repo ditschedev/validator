@@ -9,7 +9,7 @@ import java.util.List;
  * Thrown when the validation of an object fails.
  * Gets the error bag of the Validator and provides access to the errors.
  */
-public class ValidationException extends Exception {
+public class ValidationException extends RuntimeException {
 
     /**
      * The error bag holding the errors.

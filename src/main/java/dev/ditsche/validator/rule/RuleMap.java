@@ -1,5 +1,6 @@
 package dev.ditsche.validator.rule;
 
+import dev.ditsche.validator.rule.builder.StringRuleBuilder;
 import dev.ditsche.validator.ruleset.*;
 
 import java.util.HashMap;

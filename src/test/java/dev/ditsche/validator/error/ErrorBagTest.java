@@ -2,6 +2,7 @@ package dev.ditsche.validator.error;
 
 import org.junit.jupiter.api.Test;
 
+import static dev.ditsche.validator.rule.builder.RuleBuilder.string;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ErrorBagTest {
@@ -55,6 +56,7 @@ public class ErrorBagTest {
         assertThat(bag.getErrors().size()).isEqualTo(2);
         bag.add("test2", "Testmessage 4");
         assertThat(bag.getErrors().size()).isEqualTo(2);
+
     }
 
 }
