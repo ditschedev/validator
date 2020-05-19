@@ -14,9 +14,19 @@ public class DefaultRule implements Rule {
 
     @Override
     public RuleResult passes(Object value) {
+        if(value == null)
+            return RuleResult.resolve(defaultValue);
+
         if(!(defaultValue.getClass().isAssignableFrom(value.getClass())))
             return RuleResult.reject();
-        return RuleResult.resolve(defaultValue);
+
+        if(value instanceof String && ((String) value).trim().isEmpty())
+            return RuleResult.resolve(defaultValue);
+
+        if(value instanceof Number && ((Number) value).longValue() == 0)
+            return RuleResult.resolve(defaultValue);
+
+        return RuleResult.resolve();
     }
 
     @Override

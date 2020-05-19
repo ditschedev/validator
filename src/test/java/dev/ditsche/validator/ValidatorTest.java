@@ -27,7 +27,7 @@ public class ValidatorTest {
                 string("firstName").defaultValue("").trim().alphanum().max(80),
                 number("count").max(5),
                 object("nestedEntity").child(
-                        string("name").required().trim().min(4)
+                        string("name").required().trim().min(1)
                 )
         );
 
