@@ -1,8 +1,10 @@
 package dev.ditsche.validator;
 
 import dev.ditsche.validator.error.ErrorBag;
+import dev.ditsche.validator.error.FieldNotAccessibleException;
 import dev.ditsche.validator.error.ValidationException;
 import dev.ditsche.validator.rule.*;
+import dev.ditsche.validator.rule.builder.Builder;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;
@@ -12,10 +14,8 @@ import java.util.List;
 
 /**
  * Validates an object against a defined schema.
- *
- * @param <T> The type of the validated object.
  */
-public class Validator<T> {
+public class Validator {
 
     /**
      * The error bag for the
@@ -37,18 +37,40 @@ public class Validator<T> {
     /**
      * Create a new validator instance based on a given type.
      */
-    public Validator() {
+    private Validator() {
         this.errorBag = new ErrorBag();
         this.ruleParser = new RuleParser();
         this.fields = new ArrayList<>();
     }
 
-    public Validator<T> add(Validatable validatable) {
+    public static Validator fromRules(Builder ...builders) {
+        Validator validator = new Validator();
+        for(Builder builder : builders) {
+            validator.add(builder);
+        }
+        return validator;
+    }
+
+    public static Validator fromRules(Validatable ...rules) {
+        Validator validator = new Validator();
+        for(Validatable validatable : rules) {
+            validator.add(validatable);
+        }
+        return validator;
+    }
+
+
+
+    public Validator add(Builder builder) {
+        return add(builder.build());
+    }
+
+    public Validator add(Validatable validatable) {
         this.fields.add(validatable);
         return this;
     }
 
-    public T validate(T object) throws ValidationException, IllegalAccessException {
+    public <T> T validate(T object) {
         return validate(object, false);
     }
 
@@ -56,10 +78,8 @@ public class Validator<T> {
      * Validates an object against a schema and returns an error bag.
      *
      * @param object The object that need to be validated.
-     * @throws ValidationException Thrown when at least one rule fails.
-     * @throws IllegalAccessException Thrown when the field is not public.
      */
-    public T validate(T object, boolean abortEarly) throws ValidationException, IllegalAccessException {
+    public <T> T validate(T object, boolean abortEarly) {
         errorBag.clear();
         List<Field> fieldSet = new ArrayList<>();
         for (Class<?> c = object.getClass(); c != null; c = c.getSuperclass())
@@ -68,35 +88,21 @@ public class Validator<T> {
             fieldSet.addAll(Arrays.asList(fields));
         }
         for(Validatable validatable : this.fields) {
-            Field field = fieldSet.stream().filter(f -> f.getName().equals(validatable.getField())).findFirst().orElse(null);
-            if(field == null) continue;
-            Object value = FieldUtils.readField(field, object, true);
-            ValidationResult result = validatable.validate(value, abortEarly);
-            if(result.isChanged())
-                FieldUtils.writeField(field, object, value, true);
-            errorBag.merge(result.getErrorBag());
+            try {
+                Field field = fieldSet.stream().filter(f -> f.getName().equals(validatable.getField())).findFirst().orElse(null);
+                if(field == null) continue;
+                Object value = FieldUtils.readField(field, object, true);
+                ValidationResult result = validatable.validate(value, abortEarly);
+                if(result.isChanged())
+                    FieldUtils.writeField(field, object, result.getValue(), true);
+                errorBag.merge(result.getErrorBag());
+            } catch (IllegalAccessException ex) {
+                throw new FieldNotAccessibleException();
+            }
         }
         if(!errorBag.isEmpty())
             throw new ValidationException(errorBag);
 
-        return object;
-    }
-
-    /**
-     * Uses reflection to invoke a getter of the validation target.
-     * Falls back to the fields default getter. Will fail if the variable
-     * is not publicly accessible.
-     *
-     * @param field The field name whose value should be received.
-     * @param object The validation target object.
-     * @return {@code null} if the field cannot be resolved, or the value.
-     */
-    private Object getValue(Field field, Object object) throws IllegalAccessException {
-        return FieldUtils.readField(field, object, true);
-    }
-
-    private Object setValue(Field field, Object value, Object object) throws IllegalAccessException {
-        FieldUtils.writeField(field, object, value, true);
         return object;
     }
 

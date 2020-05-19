@@ -14,21 +14,21 @@ public class AlphaNumericRuleTest {
     @Test
     public void shouldFailIfNoStringIsProvided() {
         Stream.of(null, 1, new LinkedList<>(), 2.00f).forEach(value -> {
-            assertThat(alphaNumericRule.passes(value)).isFalse();
+            assertThat(alphaNumericRule.passes(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldFailIfStringIsInvalid() {
         Stream.of("hello_user123", "Hello*World", "|Pipes|", "!Username", "==Test==").forEach(value -> {
-            assertThat(alphaNumericRule.passes(value)).isFalse();
+            assertThat(alphaNumericRule.passes(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldPassIfEmailIsValid() {
         Stream.of("username293", "test1234", "1220halloe02").forEach(value -> {
-            assertThat(alphaNumericRule.passes(value)).isTrue();
+            assertThat(alphaNumericRule.passes(value).isPassed()).isTrue();
         });
     }
 

@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public class EmailRule implements Rule {
 
-    private final String PATTERN = "^[A-Za-z0-9._%'-]+@[A-Za-z0-9.-]+\\\\.[a-zA-Z]{2,4}$";
+    private final String PATTERN = "^[A-Za-z0-9._%'+-]+@[A-Za-z0-9.-]+.[a-zA-Z]{2,4}$";
 
     @Override
     public RuleResult passes(Object value) {

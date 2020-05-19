@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author Tobias Dittmann
  */
-class StringRuleBuilder implements Builder {
+public class StringRuleBuilder implements Builder {
 
     private final String field;
 
@@ -82,13 +82,18 @@ class StringRuleBuilder implements Builder {
         return this;
     }
 
+    public StringRuleBuilder trim() {
+        rules.add(new TrimRule());
+        return this;
+    }
+
     public StringRuleBuilder custom(Rule rule) {
         rules.add(rule);
         return this;
     }
 
     public ValidationField build() {
-        return new ValidationField(field, (Rule[]) rules.toArray());
+        return new ValidationField(field, rules);
     }
 
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
+import static dev.ditsche.validator.rule.builder.Rules.string;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -15,32 +16,31 @@ public class PatternRuleTest {
 
     private final PatternRule patternRule = new PatternRule("\\d*");
 
-    private Validator<TestEntity> validator;
+    private Validator validator;
 
     @BeforeEach
     public void setUp() {
-        validator = new Validator<>();
-        validator.addField("title", new PatternRule("[a-z ,.'-]*"));
+        validator = Validator.fromRules(string("title").pattern("[a-z ,.'-]*"));
     }
 
     @Test
     public void shouldFailIfNoStringIsProvided() {
         Stream.of(null, 1, new LinkedList<>(), 2.00f).forEach(value -> {
-            assertThat(patternRule.passes(value)).isFalse();
+            assertThat(patternRule.passes(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldFailIfNotMatching() {
         Stream.of("a", "777ab", ".b", "ccc545").forEach(value -> {
-            assertThat(patternRule.passes(value)).isFalse();
+            assertThat(patternRule.passes(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldPassIfMatching() {
         Stream.of("3657577", "464736", "3536346").forEach(value -> {
-            assertThat(patternRule.passes(value)).isTrue();
+            assertThat(patternRule.passes(value).isPassed()).isTrue();
         });
     }
 
@@ -52,7 +52,7 @@ public class PatternRuleTest {
     @Test
     public void shouldValidate() {
         assertDoesNotThrow(() -> {
-            validator.tryValidate(new TestEntity("test"));
+            validator.validate(new TestEntity("test", "", "", 3));
         });
     }
 

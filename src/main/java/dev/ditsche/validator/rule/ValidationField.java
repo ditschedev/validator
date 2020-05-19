@@ -51,6 +51,15 @@ public class ValidationField implements Validatable {
         this.rules = Stream.of(rules).collect(Collectors.toList());
     }
 
+    public ValidationField(String field, List<Rule> rules) {
+        if(field == null || field.trim().isEmpty())
+            throw new IllegalArgumentException("Validation field requires a valid field name");
+        if(rules == null)
+            throw new IllegalArgumentException("Validation rules cannot be null");
+        this.field = field;
+        this.rules = rules;
+    }
+
     /**
      * Adds a rule to the field.
      * Replaces the rule if existing.

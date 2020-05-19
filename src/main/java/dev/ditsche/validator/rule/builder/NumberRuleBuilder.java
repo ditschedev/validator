@@ -2,6 +2,7 @@ package dev.ditsche.validator.rule.builder;
 
 import dev.ditsche.validator.rule.Rule;
 import dev.ditsche.validator.rule.Validatable;
+import dev.ditsche.validator.rule.ValidationField;
 import dev.ditsche.validator.rule.ruleset.*;
 
 import java.util.LinkedList;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * @author Tobias Dittmann
  */
-class NumberRuleBuilder implements Builder {
+public class NumberRuleBuilder implements Builder {
 
     private final String field;
 
@@ -54,7 +55,7 @@ class NumberRuleBuilder implements Builder {
 
     @Override
     public Validatable build() {
-        return null;
+        return new ValidationField(field, rules);
     }
 
 }
