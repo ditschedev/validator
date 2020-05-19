@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public class CreditCardRule implements Rule {
 
-    private final String PATTERN = "^(\\\\d{4}[- ]?){3}\\\\d{4}$";
+    private final String PATTERN = "^(\\d{4}[- ]?){3}\\d{4}$";
 
     @Override
     public RuleResult passes(Object value) {
@@ -25,6 +25,6 @@ public class CreditCardRule implements Rule {
 
     @Override
     public String message(String field) {
-        return String.format("The field \"%s\" needs to be a valid credit card", field);
+        return String.format("The field \"%s\" needs to be a valid credit card number", field);
     }
 }
