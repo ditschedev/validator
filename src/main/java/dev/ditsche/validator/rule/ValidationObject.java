@@ -1,8 +1,9 @@
 package dev.ditsche.validator.rule;
 
 import dev.ditsche.validator.error.ErrorBag;
-import dev.ditsche.validator.error.ValueNotAccessibleException;
+import dev.ditsche.validator.error.FieldNotAccessibleException;
 import lombok.Getter;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -20,52 +21,35 @@ public class ValidationObject implements Validatable {
     private String field;
 
     @Getter
-    private List<Validatable> fields;
+    private List<Validatable> children;
+
+    public ValidationObject(String field, List<Validatable> children) {
+        this.field = field;
+        this.children = children;
+    }
 
     @Override
-    public ErrorBag validate(Object object, boolean abortEarly) {
+    public ValidationResult validate(Object object, boolean abortEarly) {
         ErrorBag errorBag = new ErrorBag();
+        boolean changed = false;
         List<Field> fieldSet = new ArrayList<>();
         for (Class<?> c = object.getClass(); c != null; c = c.getSuperclass()) {
             Field[] fields = c.getDeclaredFields();
             fieldSet.addAll(Arrays.asList(fields));
         }
-        for(Validatable validatable : fields) {
+        for(Validatable validatable : children) {
             Field field = fieldSet.stream().filter(f -> f.getName().equals(validatable.getField())).findFirst().orElse(null);
             if(field == null) continue;
             try {
-                Object value = getValue(field, object);
-                errorBag.merge(validatable.validate(value, abortEarly));
+                Object value = FieldUtils.readField(field, object, true);
+                ValidationResult validationResult = validatable.validate(value, abortEarly);
+                errorBag.merge(validationResult.getErrorBag());
+                if(validationResult.isChanged())
+                    FieldUtils.writeField(field, object, validationResult.getValue(), true);
             } catch (IllegalAccessException e) {
-                throw new ValueNotAccessibleException();
+                throw new FieldNotAccessibleException();
             }
         }
-        return errorBag;
-    }
-
-    /**
-     * Uses reflection to invoke a getter of the validation target.
-     * Falls back to the fields default getter. Will fail if the variable
-     * is not publicly accessible.
-     *
-     * @param field The field name whose value should be received.
-     * @param object The validation target object.
-     * @return {@code null} if the field cannot be resolved, or the value.
-     */
-    private Object getValue(Field field, Object object) throws IllegalAccessException {
-        for (Method method : object.getClass().getMethods()) {
-            if ((method.getName().startsWith("get")) && (method.getName().length() == (field.getName().length() + 3)) ||
-                    (method.getName().startsWith("is")) && (method.getName().length() == (field.getName().length() + 2))) {
-                if (method.getName().toLowerCase().endsWith(field.getName().toLowerCase())) {
-                    try {
-                        return method.invoke(object);
-                    }
-                    catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        return field.get(object);
+        return new ValidationResult(errorBag, object, changed);
     }
 }

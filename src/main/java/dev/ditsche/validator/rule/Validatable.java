@@ -6,6 +6,6 @@ public interface Validatable {
 
     String getField();
 
-    ErrorBag validate(Object object, boolean abortEarly);
+    ValidationResult validate(Object object, boolean abortEarly);
 
 }

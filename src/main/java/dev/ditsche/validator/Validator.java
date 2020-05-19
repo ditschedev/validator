@@ -3,13 +3,11 @@ package dev.ditsche.validator;
 import dev.ditsche.validator.error.ErrorBag;
 import dev.ditsche.validator.error.ValidationException;
 import dev.ditsche.validator.rule.*;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -28,7 +26,7 @@ public class Validator<T> {
     /**
      * All registered fields.
      */
-    private List<? extends Validatable> fields;
+    private List<Validatable> fields;
 
     /**
      * Parses a pattern and creates a Rule instance dynamically if it
@@ -45,74 +43,9 @@ public class Validator<T> {
         this.fields = new ArrayList<>();
     }
 
-    /**
-     * Adds a field to the schema.
-     * You can add any amount of rules for a field.
-     * <p>
-     * When a field is already existing the rules will be added to the fields rules.
-     * Already existing rules will be overwritten.
-     * <p>
-     * The given fields need to have a getter method starting with {@code get} or {@code is}.
-     *
-     * @param field The name of the field.
-     * @param rules The assigned rules.
-     * @return The instance of the validator.
-     */
-    public Validator<T> addField(String field, Rule...rules) {
-        ValidationField vf = fields.stream().filter(f -> f.getField().equals(field))
-                .findFirst().orElse(null);
-        if(vf == null) {
-            fields.add(new ValidationField(field, rules));
-            return this;
-        } else {
-            fields.remove(vf);
-            for(Rule rule : rules) {
-                vf.addRule(rule);
-            }
-        }
-        fields.add(vf);
+    public Validator<T> add(Validatable validatable) {
+        this.fields.add(validatable);
         return this;
-    }
-
-    /**
-     * Adds a field and rules based on a string representation. Divide rule using a
-     * {@code |} symbol. Parameters can be passed using a {@code :} syntax.
-     * E.g: "required|max:50|length:10:50"
-     * <p>
-     * The given fields need to have a getter method starting with {@code get} or {@code is}.
-     *
-     * @param field The name of the field.
-     * @param rulesString he assigned rules in string representation.
-     * @return The instance of the validator.
-     */
-    public Validator<T> addField(String field, String rulesString) {
-        String[] rules = rulesString.split("\\|");
-        Rule[] parsed = new Rule[rules.length];
-        for(int i = 0; i < rules.length; i++) {
-            int finalI = i;
-            ruleParser.parse(rules[i]).ifPresent(rule -> parsed[finalI] = rule);
-        }
-        return addField(field, parsed);
-    }
-
-    /**
-     * Adds a field using the ValidationField class.
-     *
-     * @param validationField
-     * @return
-     */
-    public Validator<T> addField(ValidationField validationField) {
-        return addField(validationField.getField(), (Rule[]) validationField.getRules().toArray());
-    }
-
-    /**
-     * Adds a field using the ValidationObject class.
-     *
-     * @param validationField
-     * @return
-     */
-    public Validator<T> addField(ValidationObject validationObject) {
-        return null;
     }
 
     public T validate(T object) throws ValidationException, IllegalAccessException {
@@ -137,38 +70,16 @@ public class Validator<T> {
         for(Validatable validatable : this.fields) {
             Field field = fieldSet.stream().filter(f -> f.getName().equals(validatable.getField())).findFirst().orElse(null);
             if(field == null) continue;
-            Object value = getValue(field, object);
-            errorBag.merge(validatable.validate(value, abortEarly));
+            Object value = FieldUtils.readField(field, object, true);
+            ValidationResult result = validatable.validate(value, abortEarly);
+            if(result.isChanged())
+                FieldUtils.writeField(field, object, value, true);
+            errorBag.merge(result.getErrorBag());
         }
         if(!errorBag.isEmpty())
             throw new ValidationException(errorBag);
 
         return object;
-    }
-
-    /**
-     * Validates an object against a schema and returns an error bag.
-     *
-     * @param object The object that need to be validated.
-     * @throws ValidationException Thrown when at least one rule fails.
-     * @throws IllegalAccessException Thrown when the field is not public.
-     */
-    public void tryValidate(T object) throws ValidationException, IllegalAccessException {
-        errorBag.clear();
-        List<Field> fieldSet = new ArrayList<>();
-        for (Class<?> c = object.getClass(); c != null; c = c.getSuperclass())
-        {
-            Field[] fields = c.getDeclaredFields();
-            fieldSet.addAll(Arrays.asList(fields));
-        }
-        for(Validatable validatable : this.fields) {
-            Field field = fieldSet.stream().filter(f -> f.getName().equals(validatable.getField())).findFirst().orElse(null);
-            if(field == null) continue;
-            Object value = getValue(field, object);
-            errorBag.merge(validatable.validate(value, abortEarly));
-        }
-        if(!errorBag.isEmpty())
-            throw new ValidationException(errorBag);
     }
 
     /**
@@ -181,20 +92,12 @@ public class Validator<T> {
      * @return {@code null} if the field cannot be resolved, or the value.
      */
     private Object getValue(Field field, Object object) throws IllegalAccessException {
-        for (Method method : object.getClass().getMethods()) {
-            if ((method.getName().startsWith("get")) && (method.getName().length() == (field.getName().length() + 3)) ||
-                    (method.getName().startsWith("is")) && (method.getName().length() == (field.getName().length() + 2))) {
-                if (method.getName().toLowerCase().endsWith(field.getName().toLowerCase())) {
-                    try {
-                        return method.invoke(object);
-                    }
-                    catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        return field.get(object);
+        return FieldUtils.readField(field, object, true);
+    }
+
+    private Object setValue(Field field, Object value, Object object) throws IllegalAccessException {
+        FieldUtils.writeField(field, object, value, true);
+        return object;
     }
 
     /**
