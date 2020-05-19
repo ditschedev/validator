@@ -20,13 +20,13 @@ public class UrlRule implements Rule {
     public RuleResult passes(Object value) {
 
         if(!(value instanceof String))
-            RuleResult.reject();
+            return RuleResult.reject();
 
         return RuleResult.passes(Pattern.matches(PATTERN, String.valueOf(value)));
     }
 
     @Override
     public String message(String field) {
-        return null;
+        return String.format("The field \"%s\" needs to be a valid url", field);
     }
 }
