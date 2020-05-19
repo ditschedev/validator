@@ -34,10 +34,10 @@ public class SizeRule implements Rule {
             return RuleResult.passes(((String) value).length() >= min && ((String) value).length() <= max);
 
         if(value instanceof Collection)
-            return RuleResult.passes(((Collection) value).size() >= min && ((Collection) value).size() <= max);
+            return RuleResult.passes(((Collection<?>) value).size() >= min && ((Collection<?>) value).size() <= max);
 
         if(value instanceof Map)
-            return RuleResult.passes(((Map) value).size() >= min && ((Map) value).size() <= max);
+            return RuleResult.passes(((Map<?,?>) value).size() >= min && ((Map<?,?>) value).size() <= max);
 
         if(!(value instanceof Number))
             return RuleResult.reject();

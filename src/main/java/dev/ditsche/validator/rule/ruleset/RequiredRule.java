@@ -20,10 +20,10 @@ public class RequiredRule implements Rule {
             return RuleResult.passes(!((String) value).trim().isEmpty());
 
         if(value instanceof Collection)
-            return RuleResult.passes(!((Collection) value).isEmpty());
+            return RuleResult.passes(!((Collection<?>) value).isEmpty());
 
         if(value instanceof Map)
-            return RuleResult.passes(!((Map) value).isEmpty());
+            return RuleResult.passes(!((Map<?,?>) value).isEmpty());
 
         return RuleResult.resolve();
     }
