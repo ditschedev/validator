@@ -1,4 +1,4 @@
-package dev.ditsche.validator.rule;
+package dev.ditsche.validator.validation;
 
 public interface Validatable {
 

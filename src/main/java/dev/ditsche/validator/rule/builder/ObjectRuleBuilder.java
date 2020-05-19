@@ -1,7 +1,7 @@
 package dev.ditsche.validator.rule.builder;
 
-import dev.ditsche.validator.rule.Validatable;
-import dev.ditsche.validator.rule.ValidationObject;
+import dev.ditsche.validator.validation.Validatable;
+import dev.ditsche.validator.validation.ValidationObject;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package dev.ditsche.validator.rule;
 
+import dev.ditsche.validator.validation.ValidationField;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;

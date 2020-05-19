@@ -5,6 +5,8 @@ import dev.ditsche.validator.error.FieldNotAccessibleException;
 import dev.ditsche.validator.error.ValidationException;
 import dev.ditsche.validator.rule.*;
 import dev.ditsche.validator.rule.builder.Builder;
+import dev.ditsche.validator.validation.Validatable;
+import dev.ditsche.validator.validation.ValidationResult;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;

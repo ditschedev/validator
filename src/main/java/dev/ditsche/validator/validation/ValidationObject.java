@@ -1,4 +1,4 @@
-package dev.ditsche.validator.rule;
+package dev.ditsche.validator.validation;
 
 import dev.ditsche.validator.error.ErrorBag;
 import dev.ditsche.validator.error.FieldNotAccessibleException;

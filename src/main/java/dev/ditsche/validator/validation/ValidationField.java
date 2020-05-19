@@ -1,7 +1,9 @@
-package dev.ditsche.validator.rule;
+package dev.ditsche.validator.validation;
 
 import dev.ditsche.validator.error.ErrorBag;
 import dev.ditsche.validator.error.ValidationException;
+import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.RuleResult;
 import lombok.Getter;
 
 import java.util.List;

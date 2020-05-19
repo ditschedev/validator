@@ -1,8 +1,8 @@
 package dev.ditsche.validator.rule.builder;
 
 import dev.ditsche.validator.rule.Rule;
-import dev.ditsche.validator.rule.Validatable;
-import dev.ditsche.validator.rule.ValidationField;
+import dev.ditsche.validator.validation.Validatable;
+import dev.ditsche.validator.validation.ValidationField;
 import dev.ditsche.validator.rule.ruleset.*;
 
 import java.util.LinkedList;
