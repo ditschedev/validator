@@ -1,7 +1,6 @@
 package dev.ditsche.validator.rule;
 
-import dev.ditsche.validator.rule.builder.StringRuleBuilder;
-import dev.ditsche.validator.ruleset.*;
+import dev.ditsche.validator.rule.ruleset.*;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -37,6 +36,12 @@ public class RuleMap {
         add("email", new RuleInfo(EmailRule.class));
         add("size", new RuleInfo(SizeRule.class, long.class, long.class));
         add("pattern", new RuleInfo(PatternRule.class, String.class));
+        add("ip", new RuleInfo(IpAddressRule.class));
+        add("creditCard", new RuleInfo(CreditCardRule.class));
+        add("length", new RuleInfo(LengthRule.class, long.class));
+        add("number", new RuleInfo(NumberRule.class));
+        add("string", new RuleInfo(StringRule.class));
+        add("default", new RuleInfo(DefaultRule.class, Object.class));
     }
 
     /**
