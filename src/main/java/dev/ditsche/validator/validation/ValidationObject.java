@@ -27,7 +27,7 @@ public class ValidationObject implements Validatable {
     }
 
     @Override
-    public ValidationResult validate(Object object, boolean abortEarly) {
+    public ValidationResult validate(String parent, Object object, boolean abortEarly) {
         ErrorBag errorBag = new ErrorBag();
         boolean changed = false;
         List<Field> fieldSet = new ArrayList<>();
@@ -40,7 +40,7 @@ public class ValidationObject implements Validatable {
             if(field == null) continue;
             try {
                 Object value = FieldUtils.readField(field, object, true);
-                ValidationResult validationResult = validatable.validate(value, abortEarly);
+                ValidationResult validationResult = validatable.validate(this.field + ".", value, abortEarly);
                 errorBag.merge(validationResult.getErrorBag());
                 if(validationResult.isChanged())
                     FieldUtils.writeField(field, object, validationResult.getValue(), true);

@@ -4,6 +4,6 @@ public interface Validatable {
 
     String getField();
 
-    ValidationResult validate(Object object, boolean abortEarly);
+    ValidationResult validate(String parent, Object object, boolean abortEarly);
 
 }

@@ -97,7 +97,7 @@ public class Validator {
                 Field field = fieldSet.stream().filter(f -> f.getName().equals(validatable.getField())).findFirst().orElse(null);
                 if(field == null) continue;
                 Object value = FieldUtils.readField(field, object, true);
-                ValidationResult result = validatable.validate(value, abortEarly);
+                ValidationResult result = validatable.validate("", value, abortEarly);
                 if(result.isChanged())
                     FieldUtils.writeField(field, object, result.getValue(), true);
                 errorBag.merge(result.getErrorBag());

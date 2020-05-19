@@ -74,13 +74,13 @@ public class ValidationField implements Validatable {
     }
 
     @Override
-    public ValidationResult validate(Object object, boolean abortEarly) {
+    public ValidationResult validate(String parent, Object object, boolean abortEarly) {
         ErrorBag errorBag = new ErrorBag();
         boolean changed = false;
         for(Rule rule : rules) {
             RuleResult ruleResult = rule.passes(object);
             if(!ruleResult.isPassed()) {
-                errorBag.add(field, rule.message(field));
+                errorBag.add(parent + field, rule.message(field));
                 if(abortEarly)
                     throw new ValidationException(errorBag);
             } else if(ruleResult.isChanged()) {
