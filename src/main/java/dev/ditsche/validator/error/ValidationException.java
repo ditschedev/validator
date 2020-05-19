@@ -1,9 +1,6 @@
 package dev.ditsche.validator.error;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 
 /**
  * Thrown when the validation of an object fails.

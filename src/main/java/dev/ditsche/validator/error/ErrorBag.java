@@ -3,9 +3,7 @@ package dev.ditsche.validator.error;
 import lombok.Getter;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The error bag holds the fields for which at least one rule has not passed.
