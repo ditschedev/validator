@@ -15,6 +15,6 @@ public class StringRule implements Rule {
 
     @Override
     public String message(String field) {
-        return null;
+        return String.format("The field \"%s\" needs to be a string", field);
     }
 }
