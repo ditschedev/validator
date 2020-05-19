@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Tobias Dittmann
  */
-class ObjectRuleBuilder implements Builder {
+public class ObjectRuleBuilder implements Builder {
 
     private final String field;
 
