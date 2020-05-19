@@ -2,6 +2,7 @@ package dev.ditsche.validator;
 
 import dev.ditsche.validator.dto.NestedEntity;
 import dev.ditsche.validator.dto.TestEntity;
+import dev.ditsche.validator.error.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,9 +26,16 @@ public class ValidatorTest {
                 string("email").required().trim().email(),
                 string("firstName").defaultValue("").trim().alphanum().max(80),
                 number("count").max(5),
-                object("nestedEntity")
+                object("nestedEntity").child(
+                        string("name").required().trim().min(4)
+                )
         );
 
+        try {
+            testEntity = validator.validate(testEntity);
+        } catch (ValidationException ex) {
+            throw  ex;
+        }
     }
 
 }

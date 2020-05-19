@@ -52,7 +52,7 @@ public class PatternRuleTest {
     @Test
     public void shouldValidate() {
         assertDoesNotThrow(() -> {
-            validator.validate(new TestEntity("test", "", "", 3));
+            validator.validate(new TestEntity("test", "", "", 3, null));
         });
     }
 
