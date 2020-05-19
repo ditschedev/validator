@@ -1,4 +1,4 @@
-package dev.ditsche.validator.ruleset;
+package dev.ditsche.validator.rule.ruleset;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,6 @@
-package dev.ditsche.validator.ruleset;
+package dev.ditsche.validator.rule.ruleset;
 
-import dev.ditsche.validator.TestEntity;
+import dev.ditsche.validator.dto.TestEntity;
 import dev.ditsche.validator.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package dev.ditsche.validator.rule;
 
-import dev.ditsche.validator.ruleset.RequiredRule;
+import dev.ditsche.validator.rule.ruleset.RequiredRule;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

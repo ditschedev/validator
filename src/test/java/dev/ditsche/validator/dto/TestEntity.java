@@ -1,4 +1,4 @@
-package dev.ditsche.validator;
+package dev.ditsche.validator.dto;
 
 /**
  * @author Tobias Dittmann

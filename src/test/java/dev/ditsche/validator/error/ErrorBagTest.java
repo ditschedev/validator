@@ -2,7 +2,6 @@ package dev.ditsche.validator.error;
 
 import org.junit.jupiter.api.Test;
 
-import static dev.ditsche.validator.rule.builder.RuleBuilder.string;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ErrorBagTest {
