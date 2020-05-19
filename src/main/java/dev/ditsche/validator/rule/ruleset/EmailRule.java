@@ -1,6 +1,7 @@
-package dev.ditsche.validator.ruleset;
+package dev.ditsche.validator.rule.ruleset;
 
 import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.RuleResult;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -11,20 +12,21 @@ import javax.mail.internet.InternetAddress;
  * defined by RFC 822.
  */
 public class EmailRule implements Rule {
+
     @Override
-    public boolean passes(Object value) {
+    public RuleResult passes(Object value) {
         if(value == null)
-            return false;
+            return RuleResult.reject();
 
         if(!(value instanceof String))
-            return false;
+            return RuleResult.reject();
 
         try {
             InternetAddress address = new InternetAddress((String) value);
             address.validate();
-            return true;
+            return RuleResult.resolve();
         } catch (AddressException e) {
-            return false;
+            return RuleResult.reject();
         }
     }
 

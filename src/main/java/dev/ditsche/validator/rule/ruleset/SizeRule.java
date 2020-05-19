@@ -1,6 +1,7 @@
-package dev.ditsche.validator.ruleset;
+package dev.ditsche.validator.rule.ruleset;
 
 import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.RuleResult;
 import lombok.AllArgsConstructor;
 
 import java.util.Collection;
@@ -26,22 +27,22 @@ public class SizeRule implements Rule {
     private long max;
 
     @Override
-    public boolean passes(Object value) {
+    public RuleResult passes(Object value) {
         if(value == null)
-            return false;
+            return RuleResult.reject();
         if(value instanceof String)
-            return ((String) value).length() >= min && ((String) value).length() <= max;
+            return RuleResult.passes(((String) value).length() >= min && ((String) value).length() <= max);
 
         if(value instanceof Collection)
-            return ((Collection) value).size() >= min && ((Collection) value).size() <= max;
+            return RuleResult.passes(((Collection) value).size() >= min && ((Collection) value).size() <= max);
 
         if(value instanceof Map)
-            return ((Map) value).size() >= min && ((Map) value).size() <= max;
+            return RuleResult.passes(((Map) value).size() >= min && ((Map) value).size() <= max);
 
         if(!(value instanceof Number))
-            return false;
+            return RuleResult.reject();
 
-        return ((Number) value).longValue() >= min && ((Number) value).longValue() <= max;
+        return RuleResult.passes(((Number) value).longValue() >= min && ((Number) value).longValue() <= max);
     }
 
     @Override

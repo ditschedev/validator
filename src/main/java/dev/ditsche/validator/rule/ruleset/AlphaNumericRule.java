@@ -1,6 +1,7 @@
-package dev.ditsche.validator.ruleset;
+package dev.ditsche.validator.rule.ruleset;
 
 import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.RuleResult;
 
 import java.util.regex.Pattern;
 
@@ -11,15 +12,15 @@ import java.util.regex.Pattern;
  */
 public class AlphaNumericRule implements Rule {
 
-    private final String pattern = "[a-zA-Z0-9]+";
+    private final String PATTERN = "[a-zA-Z0-9]+";
 
     @Override
-    public boolean passes(Object value) {
+    public RuleResult passes(Object value) {
         if(value == null)
-            return false;
+            return RuleResult.reject();
         if(!(value instanceof String))
-            return false;
-        return Pattern.matches(pattern, String.valueOf(value));
+            return RuleResult.reject();
+        return RuleResult.passes(Pattern.matches(PATTERN, String.valueOf(value)));
     }
 
     @Override

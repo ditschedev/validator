@@ -1,6 +1,7 @@
-package dev.ditsche.validator.ruleset;
+package dev.ditsche.validator.rule.ruleset;
 
 import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.RuleResult;
 
 /**
  * @author Tobias Dittmann
@@ -8,8 +9,8 @@ import dev.ditsche.validator.rule.Rule;
 public class StringRule implements Rule {
 
     @Override
-    public boolean passes(Object value) {
-        return (value instanceof String);
+    public RuleResult passes(Object value) {
+        return RuleResult.passes((value instanceof String));
     }
 
     @Override

@@ -1,6 +1,7 @@
-package dev.ditsche.validator.ruleset;
+package dev.ditsche.validator.rule.ruleset;
 
 import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.RuleResult;
 
 import java.util.Collection;
 import java.util.Map;
@@ -12,19 +13,19 @@ import java.util.Map;
 public class RequiredRule implements Rule {
 
     @Override
-    public boolean passes(Object value) {
-        if(value == null) return false;
+    public RuleResult passes(Object value) {
+        if(value == null) return RuleResult.reject();
 
         if(value instanceof String)
-            return !((String) value).trim().isEmpty();
+            return RuleResult.passes(!((String) value).trim().isEmpty());
 
         if(value instanceof Collection)
-            return !((Collection) value).isEmpty();
+            return RuleResult.passes(!((Collection) value).isEmpty());
 
         if(value instanceof Map)
-            return !((Map) value).isEmpty();
+            return RuleResult.passes(!((Map) value).isEmpty());
 
-        return true;
+        return RuleResult.resolve();
     }
 
     @Override

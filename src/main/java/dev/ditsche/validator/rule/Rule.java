@@ -12,7 +12,7 @@ public interface Rule {
      * @param value The value that will be tested.
      * @return {@code true} if the test passes, {@code false} if not.
      */
-    boolean passes(Object value);
+    RuleResult passes(Object value);
 
     /**
      * The error message, when the test does not pass.

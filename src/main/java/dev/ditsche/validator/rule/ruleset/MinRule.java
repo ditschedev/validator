@@ -1,6 +1,7 @@
-package dev.ditsche.validator.ruleset;
+package dev.ditsche.validator.rule.ruleset;
 
 import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.RuleResult;
 import lombok.AllArgsConstructor;
 
 /**
@@ -14,13 +15,13 @@ public class MinRule implements Rule {
     private long min;
 
     @Override
-    public boolean passes(Object value) {
+    public RuleResult passes(Object value) {
         if(value == null)
-            return false;
+            return RuleResult.reject();
         if(value instanceof String)
-            return ((String) value).length() >= min;
+            return RuleResult.passes(((String) value).length() >= min);
 
-        return Long.parseLong(value.toString()) >= min;
+        return RuleResult.passes(Long.parseLong(value.toString()) >= min);
     }
 
     @Override

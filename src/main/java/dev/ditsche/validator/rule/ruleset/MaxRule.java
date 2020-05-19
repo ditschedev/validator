@@ -1,6 +1,7 @@
-package dev.ditsche.validator.ruleset;
+package dev.ditsche.validator.rule.ruleset;
 
 import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.RuleResult;
 import lombok.AllArgsConstructor;
 
 /**
@@ -14,13 +15,13 @@ public class MaxRule implements Rule {
     private long max;
 
     @Override
-    public boolean passes(Object value) {
+    public RuleResult passes(Object value) {
         if(value == null)
-            return true;
+            return RuleResult.resolve();
         if(value instanceof String)
-            return ((String) value).length() <= max;
+            return RuleResult.passes(((String) value).length() <= max);
 
-        return Long.parseLong(value.toString()) <= max;
+        return RuleResult.passes(Long.parseLong(value.toString()) <= max);
     }
 
     @Override

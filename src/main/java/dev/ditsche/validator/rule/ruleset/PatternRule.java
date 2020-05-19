@@ -1,6 +1,7 @@
-package dev.ditsche.validator.ruleset;
+package dev.ditsche.validator.rule.ruleset;
 
 import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.RuleResult;
 import lombok.AllArgsConstructor;
 
 import java.util.regex.Pattern;
@@ -16,14 +17,14 @@ public class PatternRule implements Rule {
     private String pattern;
 
     @Override
-    public boolean passes(Object value) {
+    public RuleResult passes(Object value) {
         if(value == null)
-            return false;
+            return RuleResult.reject();
 
         if(!(value instanceof String))
-            return false;
+            return RuleResult.reject();
 
-        return Pattern.matches(pattern, String.valueOf(value));
+        return RuleResult.passes(Pattern.matches(pattern, String.valueOf(value)));
     }
 
     @Override
