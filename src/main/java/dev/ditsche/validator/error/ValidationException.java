@@ -1,6 +1,8 @@
 package dev.ditsche.validator.error;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -28,8 +30,8 @@ public class ValidationException extends Exception {
      *
      * @return A mapped representation of fields and its errors.
      */
-    public HashMap<String, List<String>> getErrors() {
-        return errorBag.getErrors();
+    public Collection<ValidationError> getErrors() {
+        return errorBag.getErrors().values();
     }
 
 }

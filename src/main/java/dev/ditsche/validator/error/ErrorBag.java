@@ -15,7 +15,7 @@ public class ErrorBag {
      * Holds information about the errors for each field.
      */
     @Getter
-    HashMap<String, List<String>> errors;
+    HashMap<String, ValidationError> errors;
 
     public ErrorBag() {
         clear();
@@ -29,9 +29,9 @@ public class ErrorBag {
      * @param message The error message.
      */
     public void add(String field, String message) {
-        List<String> errorList = errors.getOrDefault(field, new LinkedList<>());
+        List<String> errorList = errors.getOrDefault(field, new ValidationError(field)).getErrors();
         errorList.add(message);
-        errors.put(field, errorList);
+        errors.put(field, new ValidationError(field, errorList));
     }
 
     /**
