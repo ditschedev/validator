@@ -26,7 +26,7 @@ public class IpAddressRuleTest {
     }
 
     @Test
-    public void shouldPassWithValidCreditCardNumber() {
+    public void shouldPassWithValidIpAddress() {
         Stream.of("0.0.0.0", "127.0.0.1", "46.234.18.191").forEach(value -> {
             assertThat(ipAddressRule.passes(value).isPassed()).isTrue();
         });
