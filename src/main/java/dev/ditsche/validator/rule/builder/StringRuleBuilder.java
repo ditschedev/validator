@@ -1,8 +1,8 @@
 package dev.ditsche.validator.rule.builder;
 
 import dev.ditsche.validator.rule.Rule;
-import dev.ditsche.validator.rule.ValidationField;
-import dev.ditsche.validator.ruleset.*;
+import dev.ditsche.validator.validation.ValidationField;
+import dev.ditsche.validator.rule.ruleset.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class StringRuleBuilder implements Builder {
 
-    private String field;
+    private final String field;
 
     private List<Rule> rules;
 
@@ -28,7 +28,7 @@ public class StringRuleBuilder implements Builder {
     }
 
     public StringRuleBuilder between(int min, int max) {
-        rules.add(new BetweenRule(min, max));
+        rules.add(new SizeRule(min, max));
         return this;
     }
 
@@ -67,8 +67,33 @@ public class StringRuleBuilder implements Builder {
         return this;
     }
 
+    public StringRuleBuilder ip() {
+        rules.add(new IpAddressRule());
+        return this;
+    }
+
+    public StringRuleBuilder creditCard() {
+        rules.add(new CreditCardRule());
+        return this;
+    }
+
+    public StringRuleBuilder defaultValue(String value) {
+        rules.add(new DefaultRule(value));
+        return this;
+    }
+
+    public StringRuleBuilder trim() {
+        rules.add(new TrimRule());
+        return this;
+    }
+
+    public StringRuleBuilder custom(Rule rule) {
+        rules.add(rule);
+        return this;
+    }
+
     public ValidationField build() {
-        return new ValidationField(field, (Rule[]) rules.toArray());
+        return new ValidationField(field, rules);
     }
 
 }

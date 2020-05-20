@@ -1,9 +1,9 @@
 package dev.ditsche.validator.rule.builder;
 
-import dev.ditsche.validator.rule.ValidationField;
+import dev.ditsche.validator.validation.Validatable;
 
 public interface Builder {
 
-    ValidationField build();
+    Validatable build();
 
 }

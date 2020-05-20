@@ -1,5 +1,6 @@
 package dev.ditsche.validator.rule;
 
+import dev.ditsche.validator.validation.ValidationField;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;
@@ -24,8 +25,8 @@ public class ValidationFieldTest {
         assertThat(vf.getRules().size()).isEqualTo(0);
         vf.addRule(new Rule() {
             @Override
-            public boolean passes(Object value) {
-                return false;
+            public RuleResult passes(Object value) {
+                return RuleResult.reject();
             }
 
             @Override
@@ -42,8 +43,8 @@ public class ValidationFieldTest {
         assertThat(vf.getRules().size()).isEqualTo(0);
         Rule rule = new Rule() {
             @Override
-            public boolean passes(Object value) {
-                return false;
+            public RuleResult passes(Object value) {
+                return RuleResult.reject();
             }
 
             @Override

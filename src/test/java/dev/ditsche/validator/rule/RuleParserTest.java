@@ -1,7 +1,7 @@
 package dev.ditsche.validator.rule;
 
-import dev.ditsche.validator.ruleset.MaxRule;
-import dev.ditsche.validator.ruleset.RequiredRule;
+import dev.ditsche.validator.rule.ruleset.MaxRule;
+import dev.ditsche.validator.rule.ruleset.RequiredRule;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,7 +14,7 @@ public class RuleParserTest {
     public void shouldParseRequiredRuleByString() {
         Rule rule = ruleParser.parse("required").orElse(null);
         assertThat(rule.getClass()).isEqualTo(RequiredRule.class);
-        assertThat(rule.passes("abc")).isTrue();
+        assertThat(rule.passes("abc").isPassed()).isTrue();
     }
 
     @Test
@@ -22,8 +22,8 @@ public class RuleParserTest {
         Rule rule = ruleParser.parse("max:50").orElse(null);
         assertThat(rule.getClass()).isEqualTo(MaxRule.class);
 
-        assertThat(rule.passes(51)).isFalse();
-        assertThat(rule.passes(49)).isTrue();
+        assertThat(rule.passes(51).isPassed()).isFalse();
+        assertThat(rule.passes(49).isPassed()).isTrue();
     }
 
 }
