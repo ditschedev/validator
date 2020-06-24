@@ -76,6 +76,14 @@ public class Validator {
         return this;
     }
 
+    /**
+     * Validates an object against a schema and returns an error bag.
+     * Sets abort early to false.
+     *
+     * @param object The object that need to be validated.
+     * @param <T> The type of the validated object.
+     * @return The validated object.
+     */
     public <T> T validate(T object) {
         return validate(object, false);
     }
@@ -84,6 +92,8 @@ public class Validator {
      * Validates an object against a schema and returns an error bag.
      *
      * @param object The object that need to be validated.
+     * @param <T> The type of the validated object.
+     * @return The validated object.
      */
     public <T> T validate(T object, boolean abortEarly) {
         errorBag.clear();
