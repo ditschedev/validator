@@ -28,7 +28,7 @@ public class ValidationField implements Validatable {
 
     @Getter
     @Setter
-    private boolean optional = false;
+    private boolean optional;
 
     /**
      * Stores the rules assigned to the field.
@@ -80,7 +80,7 @@ public class ValidationField implements Validatable {
     public ValidationResult validate(String parent, Object object, boolean abortEarly) {
         ErrorBag errorBag = new ErrorBag();
         boolean changed = false;
-        if(optional && new RequiredRule().passes(object).isPassed())
+        if(optional && !(new RequiredRule().passes(object).isPassed()))
             return new ValidationResult(errorBag, object, false);
         for(Rule rule : rules) {
             RuleResult ruleResult = rule.passes(object);
