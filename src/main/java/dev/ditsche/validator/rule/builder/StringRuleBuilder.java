@@ -14,6 +14,8 @@ public class StringRuleBuilder implements Builder {
 
     private final String field;
 
+    private boolean optional = false;
+
     private List<Rule> rules;
 
     StringRuleBuilder(String field) {
@@ -87,13 +89,18 @@ public class StringRuleBuilder implements Builder {
         return this;
     }
 
+    public StringRuleBuilder optional() {
+        this.optional = true;
+        return this;
+    }
+
     public StringRuleBuilder custom(Rule rule) {
         rules.add(rule);
         return this;
     }
 
     public ValidationField build() {
-        return new ValidationField(field, rules);
+        return new ValidationField(field, rules, optional);
     }
 
 }

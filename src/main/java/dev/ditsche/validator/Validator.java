@@ -2,7 +2,6 @@ package dev.ditsche.validator;
 
 import dev.ditsche.validator.error.ErrorBag;
 import dev.ditsche.validator.error.FieldNotAccessibleException;
-import dev.ditsche.validator.error.ValidationError;
 import dev.ditsche.validator.error.ValidationException;
 import dev.ditsche.validator.rule.*;
 import dev.ditsche.validator.rule.builder.Builder;
