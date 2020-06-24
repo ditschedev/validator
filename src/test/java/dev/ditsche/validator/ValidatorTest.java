@@ -33,7 +33,66 @@ public class ValidatorTest {
         );
         testEntity = validator.validate(testEntity);
         assertThat(email).isNotEqualTo(testEntity.getEmail());
+        assertThat(testEntity.getEmail()).isEqualTo(email.trim());
+    }
 
+    @Test
+    public void shouldSkipOptionalPropertyIfNotSet() {
+        TestEntity testEntity = new TestEntity("Mr", "max@muster.de", null, 3, null);
+        validator = Validator.fromRules(
+            string("title").required().trim().max(3),
+            string("email").required().trim().email(),
+            string("firstName").optional().trim().alphanum().max(80),
+            number("count").max(5)
+        );
+        testEntity = validator.validate(testEntity);
+        assertThat(testEntity.getFirstName()).isNull();
+    }
+
+    @Test
+    public void shouldValidateOptionalPropertyIfSet() {
+        TestEntity testEntity = new TestEntity("Mr", "max@muster.de", "Max   ", 3, null);
+        validator = Validator.fromRules(
+                string("title").required().trim().max(3),
+                string("email").required().trim().email(),
+                string("firstName").optional().trim().alphanum().max(80),
+                number("count").max(5)
+        );
+        testEntity = validator.validate(testEntity);
+        assertThat(testEntity.getFirstName().length()).isEqualTo(3);
+    }
+
+    @Test
+    public void shouldSkipOptionalNestedPropertyIfNotSet() {
+        TestEntity testEntity = new TestEntity("Mr", "max@muster.de", null, 3, null);
+        validator = Validator.fromRules(
+                string("title").required().trim().max(3),
+                string("email").required().trim().email(),
+                string("firstName").optional().trim().alphanum().max(80),
+                number("count").max(5),
+                object("nestedEntity").optional().fields(
+                        string("name").required().trim().min(1)
+                )
+        );
+        testEntity = validator.validate(testEntity);
+        assertThat(testEntity.getNestedEntity()).isNull();
+    }
+
+    @Test
+    public void shouldValidateOptionalNestedPropertyIfSet() {
+        final String name = "  Test   ";
+        TestEntity testEntity = new TestEntity("Mr", "max@muster.de", null, 3, new NestedEntity(name));
+        validator = Validator.fromRules(
+                string("title").required().trim().max(3),
+                string("email").required().trim().email(),
+                string("firstName").optional().trim().alphanum().max(80),
+                number("count").max(5),
+                object("nestedEntity").optional().fields(
+                        string("name").required().trim().min(1)
+                )
+        );
+        testEntity = validator.validate(testEntity);
+        assertThat(testEntity.getNestedEntity().getName()).isNotEqualTo(name);
     }
 
 }
