@@ -14,21 +14,21 @@ public class EmailRuleTest {
     @Test
     public void shouldFailIfNoStringIsProvided() {
         Stream.of(null, 1, new LinkedList<>(), 2.00f).forEach(value -> {
-            assertThat(emailRule.passes(value).isPassed()).isFalse();
+            assertThat(emailRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldFailIfEmailIsInvalid() {
         Stream.of("test", "test@test.", "test@.", "test@_jsjfs_", "@dot.com").forEach(value -> {
-            assertThat(emailRule.passes(value).isPassed()).isFalse();
+            assertThat(emailRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldPassIfEmailIsValid() {
         Stream.of("test@test.de", "test@localhost", "maxmuster+token@dot.com").forEach(value -> {
-            assertThat(emailRule.passes(value).isPassed()).isTrue();
+            assertThat(emailRule.test(value).isPassed()).isTrue();
         });
     }
 

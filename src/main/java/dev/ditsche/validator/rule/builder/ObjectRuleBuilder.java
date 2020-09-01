@@ -13,6 +13,8 @@ public class ObjectRuleBuilder implements Builder {
 
     private final String field;
 
+    private boolean optional;
+
     private List<Validatable> children;
 
     ObjectRuleBuilder(String field) {
@@ -30,8 +32,20 @@ public class ObjectRuleBuilder implements Builder {
         return this;
     }
 
+    public ObjectRuleBuilder fields(Builder ...builders) {
+        for(Builder builder : builders) {
+            this.children.add(builder.build());
+        }
+        return this;
+    }
+
+    public ObjectRuleBuilder optional() {
+        this.optional = true;
+        return this;
+    }
+
     @Override
     public Validatable build() {
-        return new ValidationObject(field, children);
+        return new ValidationObject(field, children, optional);
     }
 }

@@ -10,47 +10,47 @@ public class MaxRuleTest {
 
     @Test
     public void shouldFailWithBiggerInteger() {
-        assertThat(maxRule.passes(13).isPassed()).isFalse();
+        assertThat(maxRule.test(13).isPassed()).isFalse();
     }
 
     @Test
     public void shouldFailWithBiggerLong() {
-        assertThat(maxRule.passes(13L).isPassed()).isFalse();
+        assertThat(maxRule.test(13L).isPassed()).isFalse();
     }
 
     @Test
     public void shouldFailWithLongString() {
-        assertThat(maxRule.passes("1234567890123456789").isPassed()).isFalse();
+        assertThat(maxRule.test("1234567890123456789").isPassed()).isFalse();
     }
 
     @Test
     public void shouldPassWithSameInteger() {
-        assertThat(maxRule.passes(12).isPassed()).isTrue();
+        assertThat(maxRule.test(12).isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassWithSameLong() {
-        assertThat(maxRule.passes(12L).isPassed()).isTrue();
+        assertThat(maxRule.test(12L).isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassWithSameString() {
-        assertThat(maxRule.passes("abcdefghijkl").isPassed()).isTrue();
+        assertThat(maxRule.test("abcdefghijkl").isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassWithLowerInteger() {
-        assertThat(maxRule.passes(2).isPassed()).isTrue();
+        assertThat(maxRule.test(2).isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassWithLowerLong() {
-        assertThat(maxRule.passes(5L).isPassed()).isTrue();
+        assertThat(maxRule.test(5L).isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassWithLowerString() {
-        assertThat(maxRule.passes("abc").isPassed()).isTrue();
+        assertThat(maxRule.test("abc").isPassed()).isTrue();
     }
 
     @Test

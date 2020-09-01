@@ -10,47 +10,47 @@ public class MinRuleTest {
 
     @Test
     public void shouldFailWithSmallerInteger() {
-        assertThat(minRule.passes(11).isPassed()).isFalse();
+        assertThat(minRule.test(11).isPassed()).isFalse();
     }
 
     @Test
     public void shouldFailWithBiggerLong() {
-        assertThat(minRule.passes(11L).isPassed()).isFalse();
+        assertThat(minRule.test(11L).isPassed()).isFalse();
     }
 
     @Test
     public void shouldFailWithShortString() {
-        assertThat(minRule.passes("abc").isPassed()).isFalse();
+        assertThat(minRule.test("abc").isPassed()).isFalse();
     }
 
     @Test
     public void shouldPassWithSameInteger() {
-        assertThat(minRule.passes(12).isPassed()).isTrue();
+        assertThat(minRule.test(12).isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassWithSameLong() {
-        assertThat(minRule.passes(12L).isPassed()).isTrue();
+        assertThat(minRule.test(12L).isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassWithSameString() {
-        assertThat(minRule.passes("abcdefghijkl").isPassed()).isTrue();
+        assertThat(minRule.test("abcdefghijkl").isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassWithBiggerInteger() {
-        assertThat(minRule.passes(20).isPassed()).isTrue();
+        assertThat(minRule.test(20).isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassWithBiggerLong() {
-        assertThat(minRule.passes(13L).isPassed()).isTrue();
+        assertThat(minRule.test(13L).isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassWithBiggerString() {
-        assertThat(minRule.passes("abcdefghijklmnopqrstuvwxyz").isPassed()).isTrue();
+        assertThat(minRule.test("abcdefghijklmnopqrstuvwxyz").isPassed()).isTrue();
     }
 
     @Test

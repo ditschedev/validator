@@ -15,7 +15,7 @@ public class AlphaNumericRule implements Rule {
     private final String PATTERN = "[a-zA-Z0-9]+";
 
     @Override
-    public RuleResult passes(Object value) {
+    public RuleResult test(Object value) {
         if(value == null)
             return RuleResult.reject();
         if(!(value instanceof String))
@@ -26,5 +26,10 @@ public class AlphaNumericRule implements Rule {
     @Override
     public String message(String field) {
         return String.format("The field \"%s\" must be alpha numeric", field);
+    }
+
+    @Override
+    public String getType() {
+        return RULE_TYPE_PREFIX + "format.alphanum";
     }
 }

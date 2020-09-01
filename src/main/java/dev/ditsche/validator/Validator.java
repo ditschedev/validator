@@ -2,9 +2,10 @@ package dev.ditsche.validator;
 
 import dev.ditsche.validator.error.ErrorBag;
 import dev.ditsche.validator.error.FieldNotAccessibleException;
-import dev.ditsche.validator.error.ValidationError;
 import dev.ditsche.validator.error.ValidationException;
-import dev.ditsche.validator.rule.*;
+import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.RuleInfo;
+import dev.ditsche.validator.rule.RuleParser;
 import dev.ditsche.validator.rule.builder.Builder;
 import dev.ditsche.validator.validation.Validatable;
 import dev.ditsche.validator.validation.ValidationResult;
@@ -75,6 +76,14 @@ public class Validator {
         return this;
     }
 
+    /**
+     * Validates an object against a schema and returns an error bag.
+     * Sets abort early to false.
+     *
+     * @param object The object that need to be validated.
+     * @param <T> The type of the validated object.
+     * @return The validated object.
+     */
     public <T> T validate(T object) {
         return validate(object, false);
     }
@@ -83,6 +92,10 @@ public class Validator {
      * Validates an object against a schema and returns an error bag.
      *
      * @param object The object that need to be validated.
+     * @param abortEarly Indicates, if the validator should return after finding
+     *                   the first unsuccessful rule.
+     * @param <T> The type of the validated object.
+     * @return The validated object.
      */
     public <T> T validate(T object, boolean abortEarly) {
         errorBag.clear();

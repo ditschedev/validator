@@ -4,11 +4,12 @@ import dev.ditsche.validator.error.ErrorBag;
 import dev.ditsche.validator.error.ValidationException;
 import dev.ditsche.validator.rule.Rule;
 import dev.ditsche.validator.rule.RuleResult;
+import dev.ditsche.validator.rule.ruleset.RequiredRule;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Describes a validatable field.
@@ -23,6 +24,10 @@ public class ValidationField implements Validatable {
     @Getter
     private String field;
 
+    @Getter
+    @Setter
+    private boolean optional;
+
     /**
      * Stores the rules assigned to the field.
      */
@@ -35,7 +40,7 @@ public class ValidationField implements Validatable {
      * @param field The fields name.
      */
     public ValidationField(String field) {
-        this(field, new Rule[0]);
+        this(field, new LinkedList<>(), false);
     }
 
     /**
@@ -44,22 +49,18 @@ public class ValidationField implements Validatable {
      * @param field The fields name.
      * @param rules The rules that will be applied.
      */
-    public ValidationField(String field, Rule ...rules) {
-        if(field == null || field.trim().isEmpty())
-            throw new IllegalArgumentException("Validation field requires a valid field name");
-        if(rules == null)
-            throw new IllegalArgumentException("Validation rules cannot be null");
-        this.field = field;
-        this.rules = Stream.of(rules).collect(Collectors.toList());
+    public ValidationField(String field, List<Rule> rules) {
+        this(field, rules, false);
     }
 
-    public ValidationField(String field, List<Rule> rules) {
+    public ValidationField(String field, List<Rule> rules, boolean optional) {
         if(field == null || field.trim().isEmpty())
             throw new IllegalArgumentException("Validation field requires a valid field name");
         if(rules == null)
             throw new IllegalArgumentException("Validation rules cannot be null");
         this.field = field;
         this.rules = rules;
+        this.optional = optional;
     }
 
     /**
@@ -77,10 +78,12 @@ public class ValidationField implements Validatable {
     public ValidationResult validate(String parent, Object object, boolean abortEarly) {
         ErrorBag errorBag = new ErrorBag();
         boolean changed = false;
+        if(optional && !(new RequiredRule().test(object).isPassed()))
+            return new ValidationResult(errorBag, object, false);
         for(Rule rule : rules) {
-            RuleResult ruleResult = rule.passes(object);
+            RuleResult ruleResult = rule.test(object);
             if(!ruleResult.isPassed()) {
-                errorBag.add(parent + field, rule.message(field));
+                errorBag.add(parent + field, rule.getType(), rule.message(field));
                 if(abortEarly)
                     throw new ValidationException(errorBag);
             } else if(ruleResult.isChanged()) {

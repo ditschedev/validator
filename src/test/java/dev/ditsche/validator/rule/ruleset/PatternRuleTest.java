@@ -26,21 +26,21 @@ public class PatternRuleTest {
     @Test
     public void shouldFailIfNoStringIsProvided() {
         Stream.of(null, 1, new LinkedList<>(), 2.00f).forEach(value -> {
-            assertThat(patternRule.passes(value).isPassed()).isFalse();
+            assertThat(patternRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldFailIfNotMatching() {
         Stream.of("a", "777ab", ".b", "ccc545").forEach(value -> {
-            assertThat(patternRule.passes(value).isPassed()).isFalse();
+            assertThat(patternRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldPassIfMatching() {
         Stream.of("3657577", "464736", "3536346").forEach(value -> {
-            assertThat(patternRule.passes(value).isPassed()).isTrue();
+            assertThat(patternRule.test(value).isPassed()).isTrue();
         });
     }
 
@@ -52,7 +52,7 @@ public class PatternRuleTest {
     @Test
     public void shouldValidate() {
         assertDoesNotThrow(() -> {
-            validator.validate(new TestEntity("test", "", "", 3, null));
+            validator.validate(new TestEntity("test", "", "", 3, null, true, null, null));
         });
     }
 

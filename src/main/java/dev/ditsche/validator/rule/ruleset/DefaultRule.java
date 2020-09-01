@@ -13,7 +13,7 @@ public class DefaultRule implements Rule {
     private final Object defaultValue;
 
     @Override
-    public RuleResult passes(Object value) {
+    public RuleResult test(Object value) {
         if(value == null)
             return RuleResult.resolve(defaultValue);
 
@@ -32,5 +32,10 @@ public class DefaultRule implements Rule {
     @Override
     public String message(String field) {
         return String.format("The field \"%s\" cannot obtain a value of class \"%s\"", field, defaultValue.getClass().getName());
+    }
+
+    @Override
+    public String getType() {
+        return RULE_TYPE_PREFIX + "type.unassignable";
     }
 }

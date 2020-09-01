@@ -1,8 +1,8 @@
 package dev.ditsche.validator.rule.builder;
 
 import dev.ditsche.validator.rule.Rule;
-import dev.ditsche.validator.validation.ValidationField;
 import dev.ditsche.validator.rule.ruleset.*;
+import dev.ditsche.validator.validation.ValidationField;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +13,8 @@ import java.util.List;
 public class StringRuleBuilder implements Builder {
 
     private final String field;
+
+    private boolean optional = false;
 
     private List<Rule> rules;
 
@@ -87,13 +89,18 @@ public class StringRuleBuilder implements Builder {
         return this;
     }
 
+    public StringRuleBuilder optional() {
+        this.optional = true;
+        return this;
+    }
+
     public StringRuleBuilder custom(Rule rule) {
         rules.add(rule);
         return this;
     }
 
     public ValidationField build() {
-        return new ValidationField(field, rules);
+        return new ValidationField(field, rules, optional);
     }
 
 }

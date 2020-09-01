@@ -15,7 +15,7 @@ public class IpAddressRule implements Rule {
     private final String PATTERN = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
     @Override
-    public RuleResult passes(Object value) {
+    public RuleResult test(Object value) {
 
         if(!(value instanceof String))
             return RuleResult.reject();
@@ -26,5 +26,10 @@ public class IpAddressRule implements Rule {
     @Override
     public String message(String field) {
         return String.format("The field \"%s\" needs to be a valid ip address", field);
+    }
+
+    @Override
+    public String getType() {
+        return RULE_TYPE_PREFIX + "format.ip";
     }
 }

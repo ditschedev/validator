@@ -14,21 +14,21 @@ public class CreditCardRuleTest {
     @Test
     public void shouldFailIfNoStringIsProvided() {
         Stream.of(null, 1, new LinkedList<>(), 2.00f).forEach(value -> {
-            assertThat(creditCardRule.passes(value).isPassed()).isFalse();
+            assertThat(creditCardRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldFailIfStringIsInvalid() {
         Stream.of("", "2222-2222-2222-222a", "4242-2424-4242-04 3").forEach(value -> {
-            assertThat(creditCardRule.passes(value).isPassed()).isFalse();
+            assertThat(creditCardRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldPassWithValidCreditCardNumber() {
         Stream.of("2222-2222-2222-2222", "4242-2424-4242-4242").forEach(value -> {
-            assertThat(creditCardRule.passes(value).isPassed()).isTrue();
+            assertThat(creditCardRule.test(value).isPassed()).isTrue();
         });
     }
 

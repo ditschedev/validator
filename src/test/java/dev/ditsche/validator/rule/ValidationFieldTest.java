@@ -25,13 +25,18 @@ public class ValidationFieldTest {
         assertThat(vf.getRules().size()).isEqualTo(0);
         vf.addRule(new Rule() {
             @Override
-            public RuleResult passes(Object value) {
+            public RuleResult test(Object value) {
                 return RuleResult.reject();
             }
 
             @Override
             public String message(String field) {
                 return "Testmessage";
+            }
+
+            @Override
+            public String getType() {
+                return RULE_TYPE_PREFIX + "test";
             }
         });
         assertThat(vf.getRules().size()).isEqualTo(1);
@@ -43,13 +48,18 @@ public class ValidationFieldTest {
         assertThat(vf.getRules().size()).isEqualTo(0);
         Rule rule = new Rule() {
             @Override
-            public RuleResult passes(Object value) {
+            public RuleResult test(Object value) {
                 return RuleResult.reject();
             }
 
             @Override
             public String message(String field) {
                 return "Testmessage";
+            }
+
+            @Override
+            public String getType() {
+                return RULE_TYPE_PREFIX + "test";
             }
         };
         vf.addRule(rule);

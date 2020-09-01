@@ -17,7 +17,7 @@ public class EmailRule implements Rule {
     private final String PATTERN = "^[A-Za-z0-9._%'+-]+@[A-Za-z0-9.-]+.[a-zA-Z]{2,4}$";
 
     @Override
-    public RuleResult passes(Object value) {
+    public RuleResult test(Object value) {
         if(value == null)
             return RuleResult.reject();
 
@@ -30,5 +30,10 @@ public class EmailRule implements Rule {
     @Override
     public String message(String field) {
         return String.format("The field \"%s\" must be a valid email address", field);
+    }
+
+    @Override
+    public String getType() {
+        return RULE_TYPE_PREFIX + "format.email";
     }
 }

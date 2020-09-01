@@ -18,7 +18,7 @@ public class ErrorBagTest {
         bag.clear();
         assertThat(bag.isEmpty()).isTrue();
 
-        bag.add("test", "Testmessage");
+        bag.add("test", "testkey", "Testmessage");
         bag.clear();
         assertThat(bag.isEmpty()).isTrue();
     }
@@ -26,7 +26,7 @@ public class ErrorBagTest {
     @Test
     public void errorBagShouldNotBeEmptyAfterAddingAnError() {
         ErrorBag bag = new ErrorBag();
-        bag.add("test", "Testmessage");
+        bag.add("test", "testkey", "Testmessage");
         assertThat(bag.isEmpty()).isFalse();
     }
 
@@ -39,21 +39,21 @@ public class ErrorBagTest {
     @Test
     public void errorBagShouldReturnAllErrorsWhenNotEmpty() {
         ErrorBag bag = new ErrorBag();
-        bag.add("test", "Testmessage");
-        bag.add("test2", "Testmessage 2");
+        bag.add("test", "testkey", "Testmessage");
+        bag.add("test2", "testkey2", "Testmessage 2");
         assertThat(bag.getErrors().size()).isEqualTo(2);
     }
 
     @Test
     public void errorBagShouldBundleErrorsAfterKey() {
         ErrorBag bag = new ErrorBag();
-        bag.add("test", "Testmessage");
+        bag.add("test", "testkey", "Testmessage");
         assertThat(bag.getErrors().size()).isEqualTo(1);
-        bag.add("test", "Testmessage 2");
+        bag.add("test", "testkey", "Testmessage 2");
         assertThat(bag.getErrors().size()).isEqualTo(1);
-        bag.add("test2", "Testmessage 3");
+        bag.add("test2", "testkey2", "Testmessage 3");
         assertThat(bag.getErrors().size()).isEqualTo(2);
-        bag.add("test2", "Testmessage 4");
+        bag.add("test2", "testkey2", "Testmessage 4");
         assertThat(bag.getErrors().size()).isEqualTo(2);
 
     }
