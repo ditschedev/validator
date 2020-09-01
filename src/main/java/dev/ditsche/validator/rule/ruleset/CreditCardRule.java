@@ -15,7 +15,7 @@ public class CreditCardRule implements Rule {
     private final String PATTERN = "^(\\d{4}[- ]?){3}\\d{4}$";
 
     @Override
-    public RuleResult passes(Object value) {
+    public RuleResult test(Object value) {
 
         if(!(value instanceof String))
             return RuleResult.reject();
@@ -26,5 +26,10 @@ public class CreditCardRule implements Rule {
     @Override
     public String message(String field) {
         return String.format("The field \"%s\" needs to be a valid credit card number", field);
+    }
+
+    @Override
+    public String getType() {
+        return RULE_TYPE_PREFIX + "format.creditcard";
     }
 }

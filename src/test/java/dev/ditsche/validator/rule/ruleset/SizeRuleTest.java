@@ -15,7 +15,7 @@ public class SizeRuleTest {
     @Test
     public void shouldFailWithInvalidTypes() {
         Stream.of(LocalDateTime.now(), null).forEach(value -> {
-            assertThat(sizeRule.passes(value).isPassed()).isFalse();
+            assertThat(sizeRule.test(value).isPassed()).isFalse();
         });
     }
 
@@ -23,14 +23,14 @@ public class SizeRuleTest {
     public void shouldFailWithInvalidSizes() {
         Stream.of("abc", "jdugrdghjkjgd", "", -2, 4, 11, 20, 100L,
                 11L, List.of(1,2,3)).forEach(value -> {
-            assertThat(sizeRule.passes(value).isPassed()).isFalse();
+            assertThat(sizeRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldPassWithValidSizes() {
         Stream.of("abcdefg", List.of(1,2,3,4,5,6,7), 5, 10, 8).forEach(value -> {
-            assertThat(sizeRule.passes(value).isPassed()).isTrue();
+            assertThat(sizeRule.test(value).isPassed()).isTrue();
         });
     }
 

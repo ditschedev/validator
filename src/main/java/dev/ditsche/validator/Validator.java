@@ -92,6 +92,8 @@ public class Validator {
      * Validates an object against a schema and returns an error bag.
      *
      * @param object The object that need to be validated.
+     * @param abortEarly Indicates, if the validator should return after finding
+     *                   the first unsuccessful rule.
      * @param <T> The type of the validated object.
      * @return The validated object.
      */

@@ -15,18 +15,18 @@ public class BooleanRuleTest {
     @Test
     public void shouldFailIfNoBooleanIsProvided() {
         Stream.of(null, 1, new LinkedList<>(), 2.00f, "false").forEach(value -> {
-            assertThat(booleanRule.passes(value).isPassed()).isFalse();
+            assertThat(booleanRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldFailWithOppositeValue() {
-        assertThat(booleanRule.passes(!value).isPassed()).isFalse();
+        assertThat(booleanRule.test(!value).isPassed()).isFalse();
     }
 
     @Test
     public void shouldPassWithValidInput() {
-        assertThat(booleanRule.passes(value).isPassed()).isTrue();
+        assertThat(booleanRule.test(value).isPassed()).isTrue();
     }
 
     @Test

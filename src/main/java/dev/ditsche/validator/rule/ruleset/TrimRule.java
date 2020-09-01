@@ -9,7 +9,7 @@ import dev.ditsche.validator.rule.RuleResult;
 public class TrimRule implements Rule {
 
     @Override
-    public RuleResult passes(Object value) {
+    public RuleResult test(Object value) {
 
         if(!(value instanceof String))
             return RuleResult.reject();
@@ -20,6 +20,11 @@ public class TrimRule implements Rule {
     @Override
     public String message(String field) {
         return String.format("The field \"%s\" needs to be a string to be able to trim it", field);
+    }
+
+    @Override
+    public String getType() {
+        return RULE_TYPE_PREFIX + "format.trim";
     }
 
 }

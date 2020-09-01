@@ -17,7 +17,7 @@ public class ValidationError {
 
     private String field;
 
-    private List<String> errors;
+    private List<ValidationErrorInfo> errors;
 
     public ValidationError(String field) {
         this(field, new LinkedList<>());

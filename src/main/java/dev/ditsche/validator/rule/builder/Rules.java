@@ -17,8 +17,12 @@ public final class Rules {
         return new ObjectRuleBuilder(field);
     }
 
-    /*public static ArrayRuleBuilder array(String field) {
+    public static BooleanRuleBuilder bool(String field) {
+        return new BooleanRuleBuilder(field);
+    }
+
+    public static ArrayRuleBuilder array(String field) {
         return new ArrayRuleBuilder(field);
-    }*/
+    }
 
 }

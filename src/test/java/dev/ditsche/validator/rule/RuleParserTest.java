@@ -14,7 +14,7 @@ public class RuleParserTest {
     public void shouldParseRequiredRuleByString() {
         Rule rule = ruleParser.parse("required").orElse(null);
         assertThat(rule.getClass()).isEqualTo(RequiredRule.class);
-        assertThat(rule.passes("abc").isPassed()).isTrue();
+        assertThat(rule.test("abc").isPassed()).isTrue();
     }
 
     @Test
@@ -22,8 +22,8 @@ public class RuleParserTest {
         Rule rule = ruleParser.parse("max:50").orElse(null);
         assertThat(rule.getClass()).isEqualTo(MaxRule.class);
 
-        assertThat(rule.passes(51).isPassed()).isFalse();
-        assertThat(rule.passes(49).isPassed()).isTrue();
+        assertThat(rule.test(51).isPassed()).isFalse();
+        assertThat(rule.test(49).isPassed()).isTrue();
     }
 
 }

@@ -14,7 +14,7 @@ public class RequiredRuleTest {
     @Test
     public void shouldFailOnEmptyString() {
         Stream.of("", "\t", " ").forEach(value ->
-                assertThat(requiredRule.passes(value).isPassed()).isFalse()
+                assertThat(requiredRule.test(value).isPassed()).isFalse()
         );
     }
 
@@ -22,18 +22,18 @@ public class RequiredRuleTest {
     public void shouldFailOnEmptyCollection() {
         Stream.of(new ArrayList<>(), new LinkedList<>(), new HashSet<>(), new HashMap<>())
                 .forEach(col -> {
-                    assertThat(requiredRule.passes(col).isPassed()).isFalse();
+                    assertThat(requiredRule.test(col).isPassed()).isFalse();
                 });
     }
 
     @Test
     public void shouldPassOnValidString() {
-        assertThat(requiredRule.passes("a").isPassed()).isTrue();
+        assertThat(requiredRule.test("a").isPassed()).isTrue();
     }
 
     @Test
     public void shouldPassOnNonEmptyList() {
-        assertThat(requiredRule.passes(List.of(1)).isPassed()).isTrue();
+        assertThat(requiredRule.test(List.of(1)).isPassed()).isTrue();
     }
 
     @Test

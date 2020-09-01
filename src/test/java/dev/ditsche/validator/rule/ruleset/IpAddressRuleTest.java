@@ -14,21 +14,21 @@ public class IpAddressRuleTest {
     @Test
     public void shouldFailIfNoStringIsProvided() {
         Stream.of(null, 1, new LinkedList<>(), 2.00f).forEach(value -> {
-            assertThat(ipAddressRule.passes(value).isPassed()).isFalse();
+            assertThat(ipAddressRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldFailIfStringIsInvalid() {
         Stream.of("", "212.35.234.256", "127.0.0").forEach(value -> {
-            assertThat(ipAddressRule.passes(value).isPassed()).isFalse();
+            assertThat(ipAddressRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldPassWithValidIpAddress() {
         Stream.of("0.0.0.0", "127.0.0.1", "46.234.18.191").forEach(value -> {
-            assertThat(ipAddressRule.passes(value).isPassed()).isTrue();
+            assertThat(ipAddressRule.test(value).isPassed()).isTrue();
         });
     }
 

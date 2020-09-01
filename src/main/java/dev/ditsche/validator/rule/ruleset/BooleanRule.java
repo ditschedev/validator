@@ -13,7 +13,7 @@ public class BooleanRule implements Rule {
     private final boolean val;
 
     @Override
-    public RuleResult passes(Object value) {
+    public RuleResult test(Object value) {
         if(!(value instanceof Boolean))
             return RuleResult.reject();
         return RuleResult.passes((boolean) value == val);
@@ -22,5 +22,10 @@ public class BooleanRule implements Rule {
     @Override
     public String message(String field) {
         return String.format("The field \"%s\" needs to be %s", field, val ? "truthy" : "falsy");
+    }
+
+    @Override
+    public String getType() {
+        return RULE_TYPE_PREFIX + "type.boolean";
     }
 }

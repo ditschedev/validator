@@ -17,7 +17,7 @@ public class PatternRule implements Rule {
     private String pattern;
 
     @Override
-    public RuleResult passes(Object value) {
+    public RuleResult test(Object value) {
         if(value == null)
             return RuleResult.reject();
 
@@ -30,5 +30,10 @@ public class PatternRule implements Rule {
     @Override
     public String message(String field) {
         return String.format("The field \"%s\" has an invalid format", field);
+    }
+
+    @Override
+    public String getType() {
+        return RULE_TYPE_PREFIX + "format.pattern";
     }
 }

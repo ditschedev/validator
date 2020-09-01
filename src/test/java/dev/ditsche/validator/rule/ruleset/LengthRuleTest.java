@@ -15,28 +15,28 @@ public class LengthRuleTest {
     @Test
     public void shouldFailIfNoStringIsProvided() {
         Stream.of(null, 1, new LinkedList<>(), 2.00f).forEach(value -> {
-            assertThat(lengthRule.passes(value).isPassed()).isFalse();
+            assertThat(lengthRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldFailIfValueIsTooLong() {
         Stream.of("212.35.234.256", "Testing things", 7, List.of(1,2,3,4,5,6,7)).forEach(value -> {
-            assertThat(lengthRule.passes(value).isPassed()).isFalse();
+            assertThat(lengthRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldFailIfValueIsTooShort() {
         Stream.of("", "Test", 5, List.of(1,2,3,4)).forEach(value -> {
-            assertThat(lengthRule.passes(value).isPassed()).isFalse();
+            assertThat(lengthRule.test(value).isPassed()).isFalse();
         });
     }
 
     @Test
     public void shouldPassWithValidLengths() {
         Stream.of("Tobias", "123456", 6, List.of(1,2,3,4,5,6)).forEach(value -> {
-            assertThat(lengthRule.passes(value).isPassed()).isTrue();
+            assertThat(lengthRule.test(value).isPassed()).isTrue();
         });
     }
 

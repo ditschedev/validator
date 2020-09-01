@@ -9,12 +9,17 @@ import dev.ditsche.validator.rule.RuleResult;
 public class NumberRule implements Rule {
 
     @Override
-    public RuleResult passes(Object value) {
+    public RuleResult test(Object value) {
         return RuleResult.passes(value instanceof Number);
     }
 
     @Override
     public String message(String field) {
         return String.format("The field \"%s\" needs to be a number", field);
+    }
+
+    @Override
+    public String getType() {
+        return RULE_TYPE_PREFIX + "type.number";
     }
 }

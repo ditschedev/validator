@@ -38,7 +38,7 @@ public class ValidationObject implements Validatable {
     public ValidationResult validate(String parent, Object object, boolean abortEarly) {
         ErrorBag errorBag = new ErrorBag();
         boolean changed = false;
-        if(optional && !(new RequiredRule().passes(object).isPassed()))
+        if(optional && !(new RequiredRule().test(object).isPassed()))
             return new ValidationResult(errorBag, object, false);
         List<Field> fieldSet = new ArrayList<>();
         for (Class<?> c = object.getClass(); c != null; c = c.getSuperclass()) {

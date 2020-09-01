@@ -27,12 +27,12 @@ public class ErrorBag {
      * @param field The field that did not pass.
      * @param message The error message.
      */
-    public void add(String field, String message) {
-        add(new ValidationError(field, List.of(message)));
+    public void add(String field, String type, String message) {
+        add(new ValidationError(field, List.of(new ValidationErrorInfo(message, type))));
     }
 
     public void add(ValidationError validationError) {
-        List<String> errorList = errors.getOrDefault(validationError.getField(), new ValidationError(validationError.getField())).getErrors();
+        List<ValidationErrorInfo> errorList = errors.getOrDefault(validationError.getField(), new ValidationError(validationError.getField())).getErrors();
         errorList.addAll(validationError.getErrors());
         errors.put(validationError.getField(), new ValidationError(validationError.getField(), errorList));
     }
