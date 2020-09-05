@@ -13,12 +13,15 @@ public class ValidationException extends RuntimeException {
      */
     private final ErrorBag errorBag;
 
+
     /**
      * Initiates a new exception.
      *
      * @param errorBag The error bag.
      */
     public ValidationException(ErrorBag errorBag) {
+        if(errorBag == null)
+            throw new IllegalArgumentException("error bag cannot be null");
         this.errorBag = errorBag;
     }
 

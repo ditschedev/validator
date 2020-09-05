@@ -124,15 +124,4 @@ public class Validator {
         return object;
     }
 
-    /**
-     * Registers a custom rule with an abbreviation.
-     *
-     * @param ruleKey The abbreviation for the custom rule.
-     * @param ruleClass The custom rule class.
-     * @param paramTypes If the rule needs params pass the types in the correct order.
-     */
-    public void register(String ruleKey, Class<? extends Rule> ruleClass, Class<?> ...paramTypes) {
-        this.ruleParser.register(ruleKey, new RuleInfo(ruleClass, paramTypes));
-    }
-
 }

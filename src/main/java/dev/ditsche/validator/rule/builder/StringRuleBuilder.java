@@ -10,13 +10,11 @@ import java.util.List;
 /**
  * @author Tobias Dittmann
  */
-public class StringRuleBuilder implements Builder {
+public class StringRuleBuilder extends RuleBuilder {
 
     private final String field;
 
     private boolean optional = false;
-
-    private List<Rule> rules;
 
     StringRuleBuilder(String field) {
         this.field = field;
@@ -25,67 +23,67 @@ public class StringRuleBuilder implements Builder {
     }
 
     public StringRuleBuilder length(int length) {
-        rules.add(new LengthRule(length));
+        this.rules.add(new LengthRule(length));
         return this;
     }
 
     public StringRuleBuilder between(int min, int max) {
-        rules.add(new SizeRule(min, max));
+        this.rules.add(new SizeRule(min, max));
         return this;
     }
 
     public StringRuleBuilder min(int min) {
-        rules.add(new MinRule(min));
+        this.rules.add(new MinRule(min));
         return this;
     }
 
     public StringRuleBuilder max(int max) {
-        rules.add(new MaxRule(max));
+        this.rules.add(new MaxRule(max));
         return this;
     }
 
     public StringRuleBuilder email() {
-        rules.add(new EmailRule());
+        this.rules.add(new EmailRule());
         return this;
     }
 
     public StringRuleBuilder url() {
-        rules.add(new UrlRule());
+        this.rules.add(new UrlRule());
         return this;
     }
 
     public StringRuleBuilder pattern(String pattern) {
-        rules.add(new PatternRule(pattern));
+        this.rules.add(new PatternRule(pattern));
         return this;
     }
 
     public StringRuleBuilder required() {
-        rules.add(new RequiredRule());
+        this.rules.add(new RequiredRule());
         return this;
     }
 
     public StringRuleBuilder alphanum() {
-        rules.add(new AlphaNumericRule());
+        this.rules.add(new AlphaNumericRule());
         return this;
     }
 
     public StringRuleBuilder ip() {
-        rules.add(new IpAddressRule());
+        this.rules.add(new IpAddressRule());
         return this;
     }
 
     public StringRuleBuilder creditCard() {
-        rules.add(new CreditCardRule());
+        this.rules.add(new CreditCardRule());
         return this;
     }
 
     public StringRuleBuilder defaultValue(String value) {
-        rules.add(new DefaultRule(value));
+        this.rules.add(new DefaultRule(value));
         return this;
     }
 
     public StringRuleBuilder trim() {
-        rules.add(new TrimRule());
+        this.rules.add(new TrimRule());
         return this;
     }
 
@@ -94,13 +92,15 @@ public class StringRuleBuilder implements Builder {
         return this;
     }
 
-    public StringRuleBuilder custom(Rule rule) {
-        rules.add(rule);
+    @Override
+    public RuleBuilder custom(Rule rule) {
+        this.rules.add(rule);
         return this;
     }
 
+    @Override
     public ValidationField build() {
-        return new ValidationField(field, rules, optional);
+        return new ValidationField(this.field, this.rules, this.optional);
     }
 
 }

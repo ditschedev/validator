@@ -1,5 +1,7 @@
 package dev.ditsche.validator.rule.builder;
 
+import dev.ditsche.validator.rule.Rule;
+import dev.ditsche.validator.rule.ruleset.RequiredRule;
 import dev.ditsche.validator.validation.Validatable;
 import dev.ditsche.validator.validation.ValidationObject;
 
@@ -23,12 +25,12 @@ public class ObjectRuleBuilder implements Builder {
     }
 
     public ObjectRuleBuilder child(Builder builder) {
-        children.add(builder.build());
+        this.children.add(builder.build());
         return this;
     }
 
     public ObjectRuleBuilder child(Validatable validatable) {
-        children.add(validatable);
+        this.children.add(validatable);
         return this;
     }
 
@@ -46,6 +48,6 @@ public class ObjectRuleBuilder implements Builder {
 
     @Override
     public Validatable build() {
-        return new ValidationObject(field, children, optional);
+        return new ValidationObject(this.field, this.children, this.optional);
     }
 }
