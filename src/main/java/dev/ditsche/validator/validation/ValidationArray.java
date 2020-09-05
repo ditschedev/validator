@@ -4,7 +4,6 @@ import dev.ditsche.validator.error.ErrorBag;
 import dev.ditsche.validator.error.ValidationException;
 import dev.ditsche.validator.rule.Rule;
 import dev.ditsche.validator.rule.RuleResult;
-import dev.ditsche.validator.rule.ruleset.ArrayRule;
 import dev.ditsche.validator.rule.ruleset.RequiredRule;
 import lombok.Getter;
 

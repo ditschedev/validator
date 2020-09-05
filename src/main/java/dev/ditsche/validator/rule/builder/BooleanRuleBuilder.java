@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author Tobias Dittmann
  */
-public class BooleanRuleBuilder implements Builder {
+public class BooleanRuleBuilder extends RuleBuilder {
 
     private String field;
 
@@ -23,17 +23,23 @@ public class BooleanRuleBuilder implements Builder {
     }
 
     public BooleanRuleBuilder isTrue() {
-        rules.add(new BooleanRule(true));
+        this.rules.add(new BooleanRule(true));
         return this;
     }
 
     public BooleanRuleBuilder isFalse() {
-        rules.add(new BooleanRule(false));
+        this.rules.add(new BooleanRule(false));
+        return this;
+    }
+
+    @Override
+    public RuleBuilder custom(Rule rule) {
+        this.rules.add(rule);
         return this;
     }
 
     @Override
     public Validatable build() {
-        return new ValidationField(field, rules);
+        return new ValidationField(this.field, this.rules);
     }
 }

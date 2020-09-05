@@ -11,11 +11,9 @@ import java.util.List;
 /**
  * @author Tobias Dittmann
  */
-public class ArrayElementRuleBuilder implements Builder {
+public class ArrayElementRuleBuilder extends RuleBuilder {
 
     private String field;
-
-    private List<Rule> rules;
 
     private List<Rule> children;
 
@@ -29,47 +27,53 @@ public class ArrayElementRuleBuilder implements Builder {
     }
 
     public ArrayElementRuleBuilder required() {
-        children.add(new RequiredRule());
+        this.children.add(new RequiredRule());
         return this;
     }
 
     public ArrayElementRuleBuilder string() {
-        children.add(new StringRule());
+        this.children.add(new StringRule());
         return this;
     }
 
     public ArrayElementRuleBuilder number() {
-        children.add(new NumberRule());
+        this.children.add(new NumberRule());
         return this;
     }
 
     public ArrayElementRuleBuilder bool(boolean value) {
-        children.add(new BooleanRule(value));
+        this.children.add(new BooleanRule(value));
         return this;
     }
 
     public ArrayElementRuleBuilder min(int min) {
-        children.add(new MinRule(min));
+        this.children.add(new MinRule(min));
         return this;
     }
 
     public ArrayElementRuleBuilder max(int max) {
-        children.add(new MaxRule(max));
+        this.children.add(new MaxRule(max));
         return this;
     }
 
     public ArrayElementRuleBuilder length(int length) {
-        children.add(new LengthRule(length));
+        this.children.add(new LengthRule(length));
         return this;
     }
 
     public ArrayElementRuleBuilder size(int min, int max) {
-        children.add(new SizeRule(min, max));
+        this.children.add(new SizeRule(min, max));
+        return this;
+    }
+
+    @Override
+    public RuleBuilder custom(Rule rule) {
+        this.children.add(rule);
         return this;
     }
 
     @Override
     public Validatable build() {
-        return new ValidationArray(field, rules, children, null, optional);
+        return new ValidationArray(this.field, this.rules, this.children, null, this.optional);
     }
 }

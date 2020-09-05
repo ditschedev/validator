@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.ditsche</groupId>
     <artifactId>validator</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.1-SNAPSHOT</version>
 
     <packaging>jar</packaging>
 
     <name>Java Validator</name>
-    <description>This is a simple Validator that can be used
+    <description>This is a simple validator that can be used
         to validate incoming http requests in Spring Boot.
     </description>
     <url>https://github.com/ditschedev/validator</url>

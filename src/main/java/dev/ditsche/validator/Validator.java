@@ -3,9 +3,6 @@ package dev.ditsche.validator;
 import dev.ditsche.validator.error.ErrorBag;
 import dev.ditsche.validator.error.FieldNotAccessibleException;
 import dev.ditsche.validator.error.ValidationException;
-import dev.ditsche.validator.rule.Rule;
-import dev.ditsche.validator.rule.RuleInfo;
-import dev.ditsche.validator.rule.RuleParser;
 import dev.ditsche.validator.rule.builder.Builder;
 import dev.ditsche.validator.validation.Validatable;
 import dev.ditsche.validator.validation.ValidationResult;
@@ -33,46 +30,98 @@ public class Validator {
     private List<Validatable> fields;
 
     /**
-     * Parses a pattern and creates a Rule instance dynamically if it
-     * is registered inside the RuleMap.
-     */
-    private RuleParser ruleParser;
-
-    /**
      * Create a new validator instance based on a given type.
      */
     private Validator() {
         this.errorBag = new ErrorBag();
-        this.ruleParser = new RuleParser();
         this.fields = new ArrayList<>();
     }
 
+    /**
+     * Creates a validator from a given set of rules.
+     *
+     * @param builders The rule builders defining the fields of
+     *                 the validation object.
+     * @return A validator instance containing the provided rules.
+     */
     public static Validator fromRules(Builder ...builders) {
         Validator validator = new Validator();
         for(Builder builder : builders) {
-            validator.add(builder);
+            validator.addField(builder);
         }
         return validator;
     }
 
-    public static Validator fromRules(Validatable ...rules) {
+    /**
+     * Creates a validator from a given set of rules.
+     *
+     * @param validatable The rule builders defining the fields of
+     *                 the validation object.
+     * @return A validator instance containing the provided rules.
+     */
+    public static Validator fromRules(Validatable ...validatable) {
         Validator validator = new Validator();
-        for(Validatable validatable : rules) {
-            validator.add(validatable);
+        for(Validatable val : validatable) {
+            validator.addField(val);
         }
         return validator;
     }
 
+    /**
+     * Creates a new and empty Validator without any fields and rules.
+     *
+     * @return A fresh and empty validator instance.
+     */
     public static Validator empty() {
         return new Validator();
     }
 
-    public Validator add(Builder builder) {
-        return add(builder.build());
+    /**
+     * Adds a field and the provided rules to the validator.
+     * If the field already exists, the rules will be added.
+     *
+     * @param builder The rules of the field as a builder.
+     * @return The updated validator instance.
+     */
+    public Validator addField(Builder builder) {
+        return addField(builder.build());
     }
 
-    public Validator add(Validatable validatable) {
+    /**
+     * Adds a field and the provided rules to the validator.
+     * If the field already exists, the rules will be added.
+     *
+     * @param validatable The rules of the field as a validatable object.
+     * @return The updated validator instance.
+     */
+    public Validator addField(Validatable validatable) {
         this.fields.add(validatable);
+        return this;
+    }
+
+    /**
+     * Adds multiple fields and the provided rules to the validator.
+     * If a field already exists, the rules will be added.
+     *
+     * @param builders The rules of the fields as builders.
+     * @return The updated validator instance.
+     */
+    public Validator addFields(Builder ...builders) {
+        for(Builder builder : builders) {
+            this.addField(builder.build());
+        }
+        return this;
+    }
+
+    /**
+     * Adds multiple fields and the provided rules to the validator.
+     * If a field already exists, the rules will be added.
+     *
+     * @param validatable The rules of the fields as validatable objects.
+     * @return The updated validator instance.
+     */
+    public Validator addFields(Validatable ...validatable) {
+        this.fields.addAll(List.of(validatable));
         return this;
     }
 
@@ -122,17 +171,6 @@ public class Validator {
             throw new ValidationException(errorBag);
 
         return object;
-    }
-
-    /**
-     * Registers a custom rule with an abbreviation.
-     *
-     * @param ruleKey The abbreviation for the custom rule.
-     * @param ruleClass The custom rule class.
-     * @param paramTypes If the rule needs params pass the types in the correct order.
-     */
-    public void register(String ruleKey, Class<? extends Rule> ruleClass, Class<?> ...paramTypes) {
-        this.ruleParser.register(ruleKey, new RuleInfo(ruleClass, paramTypes));
     }
 
 }

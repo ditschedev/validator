@@ -3,9 +3,6 @@ package dev.ditsche.validator.rule.ruleset;
 import dev.ditsche.validator.rule.Rule;
 import dev.ditsche.validator.rule.RuleResult;
 
-import java.util.Arrays;
-import java.util.Map;
-
 /**
  * @author Tobias Dittmann
  */

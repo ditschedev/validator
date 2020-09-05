@@ -4,51 +4,46 @@ import dev.ditsche.validator.rule.Rule;
 import dev.ditsche.validator.rule.ruleset.*;
 import dev.ditsche.validator.validation.Validatable;
 import dev.ditsche.validator.validation.ValidationArray;
-import dev.ditsche.validator.validation.ValidationObject;
-import lombok.Getter;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * @author Tobias Dittmann
  */
-public class ArrayRuleBuilder implements Builder {
+public class ArrayRuleBuilder extends RuleBuilder {
 
     private String field;
 
-    private List<Rule> rules;
-
     private List<Rule> childRules;
 
-    private List<Validatable> childValidateables;
+    private List<Validatable> childValidatable;
 
     private boolean optional;
 
     public ArrayRuleBuilder(String field) {
         this.field = field;
-        rules = new LinkedList<>();
-        rules.add(new ArrayRule());
+        this.rules = new LinkedList<>();
+        this.rules.add(new ArrayRule());
     }
 
     public ArrayRuleBuilder required() {
-        rules.add(new RequiredRule());
+        this.rules.add(new RequiredRule());
         return this;
     }
 
     public ArrayRuleBuilder length(int length) {
-        rules.add(new LengthRule(length));
+        this.rules.add(new LengthRule(length));
         return this;
     }
 
     public ArrayRuleBuilder min(int min) {
-        rules.add(new MinRule(min));
+        this.rules.add(new MinRule(min));
         return this;
     }
 
     public ArrayRuleBuilder max(int max) {
-        rules.add(new MaxRule(max));
+        this.rules.add(new MaxRule(max));
         return this;
     }
 
@@ -58,14 +53,14 @@ public class ArrayRuleBuilder implements Builder {
     }
 
     public ArrayElementRuleBuilder elements() {
-        return new ArrayElementRuleBuilder(field, this.rules, this.optional);
+        return new ArrayElementRuleBuilder(this.field, this.rules, this.optional);
     }
 
     public ArrayRuleBuilder objects(Builder ...builders) {
-        childRules = null;
-        childValidateables = new LinkedList<>();
+        this.childRules = null;
+        this.childValidatable = new LinkedList<>();
         for(Builder builder : builders) {
-            this.childValidateables.add(builder.build());
+            this.childValidatable.add(builder.build());
         }
         return this;
     }
@@ -76,7 +71,13 @@ public class ArrayRuleBuilder implements Builder {
     }
 
     @Override
+    public RuleBuilder custom(Rule rule) {
+        this.rules.add(rule);
+        return this;
+    }
+
+    @Override
     public Validatable build() {
-        return new ValidationArray(field, rules, childRules, childValidateables, optional);
+        return new ValidationArray(this.field, this.rules, this.childRules, this.childValidatable, this.optional);
     }
 }
