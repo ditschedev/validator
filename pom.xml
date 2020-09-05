@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <name>Java Validator</name>
-    <description>This is a simple Validator that can be used
+    <description>This is a simple validator that can be used
         to validate incoming http requests in Spring Boot.
     </description>
     <url>https://github.com/ditschedev/validator</url>
