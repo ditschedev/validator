@@ -3,6 +3,9 @@ A rule based validator developed for easy use with the Spring Boot framework.
 
 - *Extendable*: You can always add custom rules
 
+## Table of contents
+[Adding dependency](#adding-dependency)
+
 ## Adding dependency
 To use the validator add the following dependency to your `pom.xml`.
 ```xml
@@ -120,7 +123,13 @@ string(field)
 
 ---    
 
+### `number` rules
 
+#### Usage
+The following snippet returns an instance of the `NumberRuleBuilder` class.
+```java
+number(field)
+```
 
 ## Custom rules
 You can easily extend the functionality of the validator by defining custom rules. If you need a specific Regex and don't
