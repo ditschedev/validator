@@ -1,7 +1,8 @@
 # Java Validator
 A rule based validator developed for easy use with the Spring Boot framework.
 
-- *Extendable*: You can always add custom rules
+- *Extendable* ✨: You can always add custom rules
+- **
 
 ## Table of contents
 - [Adding dependency](#adding-dependency)
@@ -12,6 +13,7 @@ A rule based validator developed for easy use with the Spring Boot framework.
     - [`number` rules](#number-rules)
     - [`object` rules](#object-rules)
     - [`array` rules](#array-rules)
+- [Use with Spring Boot](#use-with-spring-boot)
 - [Custom rules](#custom-rules)
 
 
@@ -69,6 +71,7 @@ dto = validator.validate(dto);
 
 ## Internationalization
 Unfortunately it is not possible to change the outputted language to something different than english.
+
 If you need to provide other languages as well, you can make use of the error type. When
 you return the result of the `getErrors()` method of the ErrorBag that you got from the thrown
 `ValidationException` you have the error type available and can show messages based on this
@@ -257,6 +260,55 @@ an array of elements you have to use the `elements` method which returns an `Arr
 ---
 
 
+## Use with Spring Boot
+To make use of the functionalities of Spring Boot and the structure of the errors returned by 
+the `ErrorBag` instance of the thrown `ValidationException` you'd need to define a custom exception
+handler. Spring Boot makes it easy to create one. 
+
+The following advice generates a well-structured json response that the frontend can use
+to display the errors in the UI. It returns with the `422 Unprocessable Entity` status code
+of http which indicates a validation problem.
+
+```java
+@ControllerAdvice
+public class ValidationAdvice {
+
+    @ExceptionHandler(ValidationException.class)
+    @ResponseBody
+    public ResponseEntity<?> handleValidationErrors(ValidationException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
+                ex.getErrors()
+        );
+    }
+    
+}
+``` 
+
+The resulting json would look like this:
+
+```json
+[
+  {
+    "field": "email",
+    "errors": [
+      {
+        "message": "The field \"email\" is required",
+        "errorType": "validation.error.format.required"
+      },
+      {
+        "message": "The field \"email\" needs to be a valid email address",
+        "errorType": "validation.error.format.email"
+      } 
+    ] 
+  },
+  ...
+]
+```
+
+
+---
+
+
 ## Custom rules
 You can easily extend the functionality of the validator by defining custom rules. If you need a specific Regex and don't
 want to use the `PatternRule` over and over again you can create your own rule.
@@ -264,7 +316,7 @@ want to use the `PatternRule` over and over again you can create your own rule.
 To do this, implement the `Rule` interface and add an instance of your rule to the validator like shown below:
 
 ```java
-import dev.ditsche.validator.rule.RuleResult;public class MyRule implements Rule {
+public class MyRule implements Rule {
     @Override
     public RuleResult test(Object value) {
         
