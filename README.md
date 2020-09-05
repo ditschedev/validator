@@ -4,7 +4,15 @@ A rule based validator developed for easy use with the Spring Boot framework.
 - *Extendable*: You can always add custom rules
 
 ## Table of contents
-[Adding dependency](#adding-dependency)
+- [Adding dependency](#adding-dependency)
+- [Usage](#usage)
+- [Internationalization](#internationalization)
+- [Builders and Methods](#builders-and-methods)
+    - [`string` rules](#string-rules)
+    - [`number` rules](#number-rules)
+    - [`object` rules](#object-rules)
+    - [`array` rules](#array-rules)
+- [Custom rules](#custom-rules)
 
 ## Adding dependency
 To use the validator add the following dependency to your `pom.xml`.
