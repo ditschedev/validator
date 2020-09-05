@@ -6,7 +6,6 @@ import dev.ditsche.validator.validation.Validatable;
 import dev.ditsche.validator.validation.ValidationField;
 
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author Tobias Dittmann

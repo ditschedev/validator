@@ -5,7 +5,6 @@ import dev.ditsche.validator.rule.ruleset.*;
 import dev.ditsche.validator.validation.ValidationField;
 
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author Tobias Dittmann
