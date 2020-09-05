@@ -14,6 +14,10 @@ A rule based validator developed for easy use with the Spring Boot framework.
     - [`array` rules](#array-rules)
 - [Custom rules](#custom-rules)
 
+
+---
+
+
 ## Adding dependency
 To use the validator add the following dependency to your `pom.xml`.
 ```xml
@@ -23,6 +27,10 @@ To use the validator add the following dependency to your `pom.xml`.
     <version>2.2.0</version>
 </dependency>
 ```
+
+
+---
+
 
 ## Usage
 
@@ -55,12 +63,20 @@ the validate method. That way you get the validated and updated input DTO for fu
 dto = validator.validate(dto);
 ```
 
+
+---
+
+
 ## Internationalization
 Unfortunately it is not possible to change the outputted language to something different than english.
 If you need to provide other languages as well, you can make use of the error type. When
 you return the result of the `getErrors()` method of the ErrorBag that you got from the thrown
 `ValidationException` you have the error type available and can show messages based on this
 unique key. 
+
+
+---
+
 
 ## Builders and Methods
 As said, to generate a validator you should make use of the static helper methods.
@@ -71,7 +87,8 @@ The following types are supported at the moment:
 - array
 
 In the following sections you learn which methods and rules are available by default and how
-to use them.
+to use them. Each `Builder` has a `build()` method which returns a `Validateable`, if you need
+to have one of those.
 
 ### `string` rules
 
@@ -125,7 +142,8 @@ string(field)
 
 - ##### `defaultValue(String)`
     *Sets the fields value to the given string*, if the fields value is null or empty.
-
+    Rejects if the given parameter is not assignable to the fields value.
+    
 - ##### `custom(Rule)`
     Registers a custom defined rule.
 
@@ -138,6 +156,106 @@ The following snippet returns an instance of the `NumberRuleBuilder` class.
 ```java
 number(field)
 ```
+
+#### Available rules
+
+- ##### `required()`
+    Marks the field as *required* meaning it cannot be null.
+    
+- ##### `optional()`
+    Marks the field as *optional*. All rules behind this rule can fail.
+
+- ##### `length(int)`
+    Checks if the *fields value is the same* as the provided parameter `length`.
+    
+- ##### `size(int, int)`
+    Checks if the *value is between* the first and second parameter integers.
+    
+- ##### `min(int)`
+    Checks if the fields value is *greater or equal* to the given parameter.
+
+- ##### `max(int)`
+    Checks if the fields value of the string is *smaller or equal* to the given parameter.
+
+- ##### `defaultValue(int)`
+    *Sets the fields value to the given number*, if the fields value is null or 0.
+    Rejects if the given parameter is not assignable to the fields value.
+
+- ##### `custom(Rule)`
+    Registers a custom defined rule.
+
+---
+
+### `object` rules
+
+#### Usage
+The following snippet returns an instance of the `ObjectRuleBuilder` class.
+```java
+object(field)
+```
+
+#### Available rules
+
+- ##### `optional()`
+    Marks the field as *optional*. All rules behind this rule can fail.
+    
+- ##### `child(Builder)`
+    Adds a check for *one child property* using a `Builder`.
+
+- ##### `child(Validatable)`
+    Adds a check for *one child property* using a `Validatable`.
+
+- ##### `fields(Builder[])`
+    Adds a check for *one or more child properties* using the given `Builder`.
+
+---
+
+### `array` rules
+
+#### Usage
+The following snippet returns an instance of the `ArrayRuleBuilder` class.
+```java
+array(field)
+```
+
+#### Available rules
+
+- ##### `required()`
+    Marks the field as *required* meaning it cannot be null or empty.
+    
+- ##### `optional()`
+    Marks the field as *optional*. All rules behind this rule can fail.
+
+- ##### `length(int)`
+    Checks if the *length of the array is the same* as the provided parameter `length`.
+    
+- ##### `size(int, int)`
+    Checks if the *length of the array is between* the first and second parameter integers.
+    
+- ##### `min(int)`
+    Checks if the length of the array is *greater or equal* to the given parameter.
+
+- ##### `max(int)`
+    Checks if the length of the array is *smaller or equal* to the given parameter.
+
+- ##### `objects(Builder[])`
+    *Used for object arrays only!* Gets an array of `Builder` instances, which are validated for every object in the array.
+    
+- ##### `custom(Rule)`
+    Registers a custom defined rule.
+    
+#### Additional methods
+
+Arrays are handled differently as they can have elements or objects as children. To handle
+an array of elements you have to use the `elements` method which returns an `ArrayElementRuleBuilder`.
+
+- ##### `elements()`
+    Returns an `ArrayElementRuleBuilder` which has access to nearly every rule from above as
+    the type of the arrays elements is unknown.
+    
+
+---
+
 
 ## Custom rules
 You can easily extend the functionality of the validator by defining custom rules. If you need a specific Regex and don't
