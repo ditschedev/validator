@@ -2,7 +2,8 @@
 A rule based validator developed for easy use with the Spring Boot framework.
 
 - *Extendable* ✨: You can always add custom rules
-- **
+- *Error format* ✅: You can directly return the result of the failed validation
+- *Well documented* 📑: Always know what you are doing
 
 ## Table of contents
 - [Adding dependency](#adding-dependency)
