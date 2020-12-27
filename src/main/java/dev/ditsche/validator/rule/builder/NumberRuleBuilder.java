@@ -46,7 +46,7 @@ public class NumberRuleBuilder extends RuleBuilder {
     }
 
     @Override
-    public RuleBuilder custom(Rule rule) {
+    public NumberRuleBuilder custom(Rule rule) {
         this.rules.add(rule);
         return this;
     }

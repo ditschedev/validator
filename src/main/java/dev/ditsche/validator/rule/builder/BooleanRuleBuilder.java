@@ -33,7 +33,7 @@ public class BooleanRuleBuilder extends RuleBuilder {
     }
 
     @Override
-    public RuleBuilder custom(Rule rule) {
+    public BooleanRuleBuilder custom(Rule rule) {
         this.rules.add(rule);
         return this;
     }
