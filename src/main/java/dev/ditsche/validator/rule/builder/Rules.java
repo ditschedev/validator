@@ -25,8 +25,4 @@ public final class Rules {
         return new ArrayRuleBuilder(field);
     }
 
-    public static TemporalRuleBuilder temporal(String field) {
-        return new TemporalRuleBuilder(field);
-    }
-
 }

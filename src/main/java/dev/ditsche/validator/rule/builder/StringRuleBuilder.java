@@ -92,7 +92,7 @@ public class StringRuleBuilder extends RuleBuilder {
     }
 
     @Override
-    public StringRuleBuilder custom(Rule rule) {
+    public RuleBuilder custom(Rule rule) {
         this.rules.add(rule);
         return this;
     }
