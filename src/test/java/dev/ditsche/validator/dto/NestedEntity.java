@@ -3,6 +3,8 @@ package dev.ditsche.validator.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Tobias Dittmann
  */
@@ -11,5 +13,7 @@ import lombok.Data;
 public class NestedEntity {
 
     public String name;
+
+    public LocalDateTime created;
 
 }

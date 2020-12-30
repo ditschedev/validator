@@ -14,6 +14,7 @@ A rule based validator developed for easy use with the Spring Boot framework.
     - [`number` rules](#number-rules)
     - [`object` rules](#object-rules)
     - [`array` rules](#array-rules)
+    - [`temporal` rules](#temporal-rules)
 - [Use with Spring Boot](#use-with-spring-boot)
 - [Custom rules](#custom-rules)
 
@@ -27,7 +28,7 @@ To use the validator add the following dependency to your `pom.xml`.
 <dependency>
     <groupId>dev.ditsche</groupId>
     <artifactId>validator</artifactId>
-    <version>2.2.0</version>
+    <version>2.3.0</version>
 </dependency>
 ```
 
@@ -48,7 +49,8 @@ Validator validator = Validator.fromRules(
     string("gender").optional().defaultValue("m").max(1),
     number("age").required().min(18),
     object("tickets").fields(
-        string("event").required().trim()
+        string("event").required().trim(),
+        temporal("date").required().future()
     )
 );
 ```
@@ -256,7 +258,40 @@ an array of elements you have to use the `elements` method which returns an `Arr
 - ##### `elements()`
     Returns an `ArrayElementRuleBuilder` which has access to nearly every rule from above as
     the type of the arrays elements is unknown.
-    
+
+
+---
+
+### `temporal` rules
+
+#### Usage
+The following snippet returns an instance of the `TemporalRuleBuilder` class.
+```java
+temporal(field)
+```
+
+#### Available rules
+
+- ##### `required()`
+  Marks the field as *required* meaning it cannot be null or empty.
+
+- ##### `optional()`
+  Marks the field as *optional*. All rules behind this rule can fail.
+
+- ##### `past()`
+  Checks if the *value* is before the current timestamp.
+
+- ##### `future()`
+  Checks if the *value* is after the current timestamp.
+
+- ##### `before(temporal)`
+  Takes a temporal object, for example `LocalDateTime`, `LocalDate` or `Date` and compares this to the value. Returns `true`, if the objects value is smaller than the given parameter.
+
+- ##### `after(temporal)`
+  Takes a temporal object, for example `LocalDateTime`, `LocalDate` or `Date` and compares this to the value. Returns `true`, if the objects value is greater than the given parameter.
+
+- ##### `custom(Rule)`
+  Registers a custom defined rule.
 
 ---
 

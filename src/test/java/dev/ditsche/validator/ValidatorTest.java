@@ -5,6 +5,8 @@ import dev.ditsche.validator.dto.TestEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static dev.ditsche.validator.rule.builder.Rules.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,7 +22,7 @@ public class ValidatorTest {
     @Test
     public void shouldValidateExample() {
         final String email = "hello@ditsche.dev  ";
-        TestEntity testEntity = new TestEntity("Mr", email, "Tobias", 4, new NestedEntity("Max"), true, new int[2], null);
+        TestEntity testEntity = new TestEntity("Mr", email, "Tobias", 4, new NestedEntity("Max", LocalDateTime.now().minusDays(2)), true, new int[2], null);
         assertThat(email).isEqualTo(testEntity.getEmail());
         validator = Validator.fromRules(
                 array("elements").required().max(2),
@@ -28,8 +30,9 @@ public class ValidatorTest {
                 string("email").required().trim().email(),
                 string("firstName").defaultValue("").trim().alphanum().max(80),
                 number("count").max(5),
-                object("nestedEntity").child(
-                        string("name").required().trim().min(1)
+                object("nestedEntity").fields(
+                        string("name").required().trim().min(1),
+                        temporal("created").required().past()
                 ),
                 bool("active").isTrue()
         );
@@ -41,7 +44,7 @@ public class ValidatorTest {
     @Test
     public void shouldValidateNestedArray() {
         final String email = "hello@ditsche.dev  ";
-        TestEntity testEntity = new TestEntity("Mr", email, "Tobias", 4, new NestedEntity("Max"), true, null, null);
+        TestEntity testEntity = new TestEntity("Mr", email, "Tobias", 4, new NestedEntity("Max", LocalDateTime.now().plusDays(2)), true, null, null);
         assertThat(email).isEqualTo(testEntity.getEmail());
         validator = Validator.fromRules(
                 array("elements").optional().elements().max(10),
@@ -52,8 +55,9 @@ public class ValidatorTest {
                 string("email").required().trim().email(),
                 string("firstName").defaultValue("").trim().alphanum().max(80),
                 number("count").max(5),
-                object("nestedEntity").child(
-                        string("name").required().trim().min(1)
+                object("nestedEntity").fields(
+                        string("name").required().trim().min(1),
+                        temporal("created").required().future()
                 ),
                 bool("active").isTrue()
         );
@@ -107,14 +111,15 @@ public class ValidatorTest {
     @Test
     public void shouldValidateOptionalNestedPropertyIfSet() {
         final String name = "  Test   ";
-        TestEntity testEntity = new TestEntity("Mr", "max@muster.de", null, 3, new NestedEntity(name), true, null, null);
+        TestEntity testEntity = new TestEntity("Mr", "max@muster.de", null, 3, new NestedEntity(name, null), true, null, null);
         validator = Validator.fromRules(
                 string("title").required().trim().max(3),
                 string("email").required().trim().email(),
                 string("firstName").optional().trim().alphanum().max(80),
                 number("count").max(5),
                 object("nestedEntity").optional().fields(
-                        string("name").required().trim().min(1)
+                        string("name").required().trim().min(1),
+                        temporal("created").optional().past()
                 )
         );
         testEntity = validator.validate(testEntity);
