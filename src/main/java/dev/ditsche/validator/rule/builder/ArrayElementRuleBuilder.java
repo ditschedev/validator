@@ -67,7 +67,7 @@ public class ArrayElementRuleBuilder extends RuleBuilder {
     }
 
     @Override
-    public RuleBuilder custom(Rule rule) {
+    public ArrayElementRuleBuilder custom(Rule rule) {
         this.children.add(rule);
         return this;
     }
