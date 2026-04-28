@@ -1,6 +1,9 @@
 # Java Validator
 A rule based validator developed for easy use with the Spring Boot framework.
 
+> [!WARNING]
+> The library was reworked and moved to [Teki](https://github.com/ditschedev/teki) and will be maintained there.
+
 - *Extendable* ✨: You can always add custom rules
 - *Error format* ✅: You can directly return the result of the failed validation
 - *Well documented* 📑: Always know what you are doing
